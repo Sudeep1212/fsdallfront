@@ -1,0 +1,449 @@
+// Admin Login Form Styles
+.admin-login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff; // Light mode - white background like home page
+  padding: 2rem;
+  padding-top: 120px; // Space for navbar (80px) + extra padding
+  position: relative;
+  
+  // Dark mode background - same as home page dark theme
+  :host-context(.dark) & {
+    background: #0f172a;
+  }
+  
+  // Subtle pattern overlay
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      radial-gradient(circle at 25% 25%, rgba(58, 114, 236, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 75% 75%, rgba(139, 92, 246, 0.03) 0%, transparent 50%);
+    pointer-events: none;
+  }
+}
+
+.admin-form-wrapper {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 2rem 2rem; // Reduced padding
+  box-shadow: 
+    0 20px 50px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  width: 100%;
+  max-width: 500px; // Increased width
+  position: relative;
+  z-index: 1;
+  
+  // Dark mode styling
+  :host-context(.dark) & {
+    background: rgba(15, 23, 42, 0.95);
+    box-shadow: 
+      0 20px 50px rgba(0, 0, 0, 0.3),
+      0 0 0 1px rgba(255, 255, 255, 0.05);
+  }
+}
+
+// Admin Badge
+.admin-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #3a72ec 0%, #8b5cf6 100%); // Theme gradient
+  color: white;
+  padding: 0.5rem 1.25rem; // Reduced padding
+  border-radius: 50px;
+  font-size: 0.75rem; // Smaller font
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin: 0 auto 1.5rem; // Reduced margin
+  width: fit-content;
+  box-shadow: 0 4px 15px rgba(58, 114, 236, 0.3);
+  
+  svg {
+    flex-shrink: 0;
+    width: 18px; // Smaller icon
+    height: 18px;
+  }
+}
+
+// Form Header
+.form-header {
+  text-align: center;
+  margin-bottom: 1.75rem; // Reduced margin
+  
+  .form-title {
+    font-size: 1.75rem; // Reduced font size
+    font-weight: 700;
+    background: linear-gradient(135deg, #3a72ec 0%, #8b5cf6 100%); // Theme gradient
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+  }
+  
+  .form-subtitle {
+    color: #6b7280;
+    font-size: 0.875rem; // Smaller subtitle
+    margin: 0;
+    line-height: 1.4;
+    
+    :host-context(.dark) & {
+      color: #9ca3af;
+    }
+  }
+}
+
+// Form Styling
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem; // Reduced gap between form elements
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem; // Reduced gap
+    
+    .form-label {
+      font-size: 0.8rem; // Smaller font
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 0.25rem;
+      
+      :host-context(.dark) & {
+        color: #e5e7eb;
+      }
+    }
+    
+    .input-wrapper {
+      position: relative;
+      
+      .input-icon {
+        position: absolute;
+        left: 0.875rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #9ca3af;
+        z-index: 1;
+        pointer-events: none;
+        width: 18px; // Smaller icon
+        height: 18px;
+      }
+      
+      .form-input {
+        width: 100%;
+        padding: 0.875rem 0.875rem 0.875rem 2.5rem; // Reduced padding
+        border: 2px solid #e5e7eb;
+        border-radius: 10px; // Smaller border radius
+        font-size: 0.875rem; // Smaller font
+        transition: all 0.2s ease;
+        background: #ffffff;
+        color: #1f2937;
+        box-sizing: border-box;
+        
+        :host-context(.dark) & {
+          background: #1f2937;
+          border-color: #374151;
+          color: #f9fafb;
+        }
+        
+        &::placeholder {
+          color: #9ca3af;
+          font-size: 0.875rem;
+        }
+        
+        &:focus {
+          outline: none;
+          border-color: #3a72ec; // Theme color
+          box-shadow: 0 0 0 3px rgba(58, 114, 236, 0.1);
+          
+          ~ .input-icon {
+            color: #3a72ec; // Theme color
+          }
+        }
+        
+        &.error {
+          border-color: #ef4444;
+          box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
+      }
+    }
+    
+    .error-message {
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+      color: #ef4444;
+      font-size: 0.75rem; // Smaller error text
+      font-weight: 500;
+      
+      svg {
+        flex-shrink: 0;
+        width: 12px;
+        height: 12px;
+      }
+    }
+  }
+  
+  .security-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.625rem;
+    padding: 0.875rem; // Reduced padding
+    background: rgba(58, 114, 236, 0.05); // Theme color
+    border: 1px solid rgba(58, 114, 236, 0.2);
+    border-radius: 10px;
+    color: #3a72ec; // Theme color
+    font-size: 0.8rem; // Smaller font
+    line-height: 1.4;
+    
+    :host-context(.dark) & {
+      background: rgba(58, 114, 236, 0.1);
+      border: 1px solid rgba(58, 114, 236, 0.3);
+      color: #60a5fa;
+    }
+    
+    svg {
+      flex-shrink: 0;
+      margin-top: 0.125rem;
+      width: 16px;
+      height: 16px;
+    }
+  }
+  
+  .error-alert {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.875rem; // Reduced padding
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 10px;
+    color: #dc2626;
+    font-size: 0.8rem; // Smaller font
+    
+    :host-context(.dark) & {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    
+    svg {
+      flex-shrink: 0;
+      width: 16px;
+      height: 16px;
+    }
+  }
+  
+  .admin-submit-btn {
+    width: 100%;
+    padding: 0.875rem 1.5rem; // Reduced padding
+    background: linear-gradient(135deg, #3a72ec 0%, #8b5cf6 100%); // Theme gradient
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.925rem; // Smaller font
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(58, 114, 236, 0.3);
+    
+    &:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(58, 114, 236, 0.4);
+    }
+    
+    &:active:not(:disabled) {
+      transform: translateY(0);
+    }
+    
+    &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .loading-spinner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      
+      .spinner {
+        animation: spin 1s linear infinite;
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+}
+
+// Admin Support
+.admin-support {
+  margin-top: 1.5rem; // Reduced margin
+  text-align: center;
+  padding-top: 1.25rem; // Reduced padding
+  border-top: 1px solid #e5e7eb;
+  
+  :host-context(.dark) & {
+    border-top: 1px solid #374151;
+  }
+  
+  p {
+    color: #6b7280;
+    font-size: 0.8rem; // Smaller font
+    margin-bottom: 0.625rem;
+    
+    :host-context(.dark) & {
+      color: #9ca3af;
+    }
+  }
+  
+  .support-btn {
+    background: none;
+    border: 1px solid #3a72ec; // Theme color
+    color: #3a72ec; // Theme color
+    padding: 0.5rem 1rem; // Reduced padding
+    border-radius: 8px;
+    font-size: 0.8rem; // Smaller font
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      background: #3a72ec; // Theme color
+      color: white;
+    }
+    
+    :host-context(.dark) & {
+      border-color: #60a5fa;
+      color: #60a5fa;
+      
+      &:hover {
+        background: #60a5fa;
+        color: #0f172a;
+      }
+    }
+  }
+}
+
+// Back to Landing
+.back-to-landing {
+  margin-top: 1.5rem; // Reduced margin
+  text-align: center;
+  
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    background: none;
+    border: none;
+    color: #6b7280;
+    font-size: 0.8rem; // Smaller font
+    cursor: pointer;
+    transition: color 0.2s ease;
+    
+    :host-context(.dark) & {
+      color: #9ca3af;
+    }
+    
+    &:hover {
+      color: #3a72ec; // Theme color
+      
+      :host-context(.dark) & {
+        color: #60a5fa;
+      }
+    }
+    
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+  }
+}
+
+// Animations
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .admin-login-container {
+    padding: 1rem;
+    padding-top: 100px; // Adjusted for mobile navbar
+  }
+  
+  .admin-form-wrapper {
+    padding: 1.5rem; // Reduced padding
+    max-width: 100%;
+  }
+  
+  .form-header .form-title {
+    font-size: 1.5rem; // Smaller on mobile
+  }
+  
+  .admin-form {
+    .form-group .input-wrapper .form-input {
+      padding: 0.75rem 0.75rem 0.75rem 2.25rem; // Reduced padding
+      font-size: 0.875rem;
+    }
+    
+    .admin-submit-btn {
+      padding: 0.75rem; // Reduced padding
+      font-size: 0.875rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-form-wrapper {
+    padding: 1.25rem; // Further reduced padding
+    border-radius: 16px;
+  }
+  
+  .admin-badge {
+    font-size: 0.7rem;
+    padding: 0.5rem 1rem; // Reduced padding
+  }
+  
+  .form-header {
+    margin-bottom: 1.5rem; // Reduced margin
+    
+    .form-title {
+      font-size: 1.375rem; // Smaller on small mobile
+    }
+    
+    .form-subtitle {
+      font-size: 0.8rem;
+    }
+  }
+  
+  .admin-form {
+    gap: 1rem; // Reduced gap
+    
+    .security-notice {
+      font-size: 0.75rem;
+      padding: 0.75rem; // Reduced padding
+    }
+    
+    .admin-submit-btn {
+      padding: 0.75rem; // Reduced padding
+      font-size: 0.875rem;
+    }
+  }
+}

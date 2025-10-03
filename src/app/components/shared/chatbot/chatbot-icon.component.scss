@@ -1,0 +1,98 @@
+// Chatbot Icon Styling - Clean floating icon (bottom right)
+.chatbot-icon-container {
+  position: fixed !important;
+  bottom: 10.2rem !important;
+  right: 37px !important;
+  z-index: 999 !important;    // Lower z-index so sidebar can go in front
+  cursor: pointer;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  transition: opacity 0.3s ease; // Simple fade transition only
+  
+  // Simple hover effect - just slight scale
+  &:hover {
+    .chatbot-icon {
+      transform: scale(1.05); // Minimal scale effect
+    }
+  }
+
+  // When active (sidebar open), icon stays normal - no special effects
+  &.active {
+    z-index: 998 !important; // Even lower z-index when sidebar is open
+  }
+
+  // Clean icon container - no background, no border, no shadow
+  .chatbot-icon {
+    width: 64px;           
+    height: 64px;
+    background: transparent; // Completely transparent
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease; // Only transform transition
+    position: relative;
+    // No border, no box-shadow, no border-radius
+
+    // Image styling - clean and simple
+    img {
+      width: 60px !important;
+      height: 60px !important;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+      // No filter, no drop-shadow, no border-radius for natural icon appearance
+    }
+  }
+
+  // Notification dot for new messages (optional)
+  .notification-dot {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 12px;
+    height: 12px;
+    background: #ef4444;
+    border-radius: 50%;
+    border: 2px solid white;
+    z-index: 3;
+
+    :host-context(.dark) & {
+      border-color: #0f172a;
+    }
+  }
+}
+
+// Simple responsive design
+@media (max-width: 768px) {
+  .chatbot-icon-container {
+    bottom: 20px;
+    right: 20px;
+    
+    .chatbot-icon {
+      width: 56px;
+      height: 56px;
+      
+      img {
+        width: 52px !important;
+        height: 52px !important;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .chatbot-icon-container {
+    bottom: 18px;
+    right: 18px;
+    
+    .chatbot-icon {
+      width: 52px;
+      height: 52px;
+      
+      img {
+        width: 48px !important;
+        height: 48px !important;
+      }
+    }
+  }
+}

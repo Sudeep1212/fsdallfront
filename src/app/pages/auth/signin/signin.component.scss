@@ -1,0 +1,328 @@
+// Authentication Landing Page Styles
+.auth-landing-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.auth-section {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+  min-height: 100vh;
+}
+
+// Admin Section (Left)
+.admin-section {
+  background: white; // White background for light mode
+  color: #1e293b; // Dark text for light mode
+  
+  :host-context(.dark) & {
+    background: #0f172a; // Dark background for dark mode
+    color: #f1f5f9; // Light text for dark mode
+  }
+  
+  .section-content {
+    max-width: 500px;
+    text-align: center;
+    z-index: 2;
+    position: relative;
+  }
+  
+  .section-badge {
+    background: rgba(58, 114, 236, 0.1); // Light theme badge background
+    color: #3A72EC; // Theme color text
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-bottom: 2rem;
+    display: inline-block;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(58, 114, 236, 0.2);
+    
+    :host-context(.dark) & {
+      background: rgba(58, 114, 236, 0.2);
+      color: #60a5fa;
+      border: 1px solid rgba(58, 114, 236, 0.3);
+    }
+  }
+  
+  .section-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+    color: #1e293b;
+    
+    :host-context(.dark) & {
+      color: #f1f5f9;
+    }
+    
+    @media (max-width: 768px) {
+      font-size: 2.5rem;
+    }
+  }
+  
+  .section-description {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+    opacity: 0.8;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    color: #475569;
+    
+    :host-context(.dark) & {
+      color: #cbd5e0;
+    }
+  }
+  
+  .primary-btn {
+    background: #3A72EC; // Theme color background
+    color: white;
+    border: none;
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    font-size: 1.125rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(58, 114, 236, 0.3);
+    
+    &:hover {
+      background: #2c5aa0;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(58, 114, 236, 0.4);
+    }
+    
+    &:active {
+      transform: translateY(0);
+    }
+  }
+  
+  .bottom-message {
+    margin-top: 3rem;
+    
+    p {
+      margin-bottom: 0.5rem;
+      opacity: 0.8;
+      color: #475569;
+      
+      :host-context(.dark) & {
+        color: #cbd5e0;
+      }
+    }
+    
+    .link-text {
+      color: #3A72EC;
+      text-decoration: underline;
+      font-weight: 500;
+      cursor: pointer;
+      
+      &:hover {
+        color: #2c5aa0;
+      }
+    }
+  }
+}
+
+// Student Section (Right)
+.student-section {
+  position: relative;
+  background: white; // Default white background for light mode
+  
+  :host-context(.dark) & {
+    background: #0f172a; // Dark background for dark mode
+  }
+  
+  .section-content {
+    max-width: 500px;
+    text-align: center;
+    z-index: 3; // Higher z-index to appear above overlay
+    position: relative;
+    color: #ffffff; // Dark text for light mode
+    
+    :host-context(.dark) & {
+      color: #f1f5f9; // Light text for dark mode
+    }
+  }
+  
+  .section-badge {
+    background: rgba(58, 114, 236, 0.2); // Light theme badge background
+    color: #ffffff; // White text for student badge
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-bottom: 2rem;
+    display: inline-block;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(58, 114, 236, 0.3);
+    
+    :host-context(.dark) & {
+      background: rgba(58, 114, 236, 0.3);
+      color: #60a5fa;
+      border: 1px solid rgba(58, 114, 236, 0.4);
+    }
+  }
+  
+  .section-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+    color: #ffffff;
+    
+    :host-context(.dark) & {
+      color: #f1f5f9;
+    }
+    
+    @media (max-width: 768px) {
+      font-size: 2.5rem;
+    }
+  }
+  
+  .section-description {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+    opacity: 0.8;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    color: #ffffff;
+    
+    :host-context(.dark) & {
+      color: #cbd5e0;
+    }
+  }
+  
+  .primary-btn {
+    background: linear-gradient(135deg, #3a72ec, #8b5cf6);;
+    color: white;
+    border: none;
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    font-size: 1.125rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(58, 114, 236, 0.3);
+    
+    &:hover {
+      background: linear-gradient(135deg, #4a82fc, #9b6cf6);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(58, 114, 236, 0.4);
+    }
+    
+    &:active {
+      transform: translateY(0);
+    }
+  }
+  
+  .bottom-message {
+    margin-top: 3rem;
+    
+    p {
+      margin-bottom: 0.5rem;
+      color: #ffffff;
+      
+      :host-context(.dark) & {
+        color: #cbd5e0;
+      }
+    }
+    
+    .link-text {
+      color: #3A72EC;
+      text-decoration: underline;
+      font-weight: 500;
+      cursor: pointer;
+      
+      &:hover {
+        color: #2c5aa0;
+      }
+    }
+  }
+  
+  .student-bg-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('../../../../assets/images/signin-page-img.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 1;
+    
+    // Light overlay for light mode to make white text visible
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.3); // Light overlay for better text visibility in light mode
+      z-index: 2;
+    }
+    
+    // Darker overlay for dark mode
+    :host-context(.dark) &::after {
+      background: rgba(0, 0, 0, 0.6); // Darker overlay for better text visibility in dark mode
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .auth-landing-container {
+    flex-direction: column;
+    min-height: auto;
+  }
+  
+  .auth-section {
+    min-height: 50vh;
+    padding: 1.5rem;
+  }
+  
+  .admin-section .section-title,
+  .student-section .section-title {
+    font-size: 2rem;
+  }
+  
+  .admin-section .section-description,
+  .student-section .section-description {
+    font-size: 1rem;
+  }
+  
+  .primary-btn {
+    padding: 0.875rem 2rem !important;
+    font-size: 1rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-section {
+    padding: 1rem;
+  }
+  
+  .admin-section .section-title,
+  .student-section .section-title {
+    font-size: 1.75rem;
+  }
+  
+  .primary-btn {
+    padding: 0.75rem 1.5rem !important;
+    font-size: 0.95rem !important;
+  }
+}

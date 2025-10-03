@@ -1,0 +1,108 @@
+// Admin Layout Styles
+:host {
+  --sidebar-width: 280px;
+  
+  // Light theme colors
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F8FAFC;
+}
+
+// Dark theme
+:host-context([data-theme="dark"]) {
+  --bg-primary: #0F172A;
+  --bg-secondary: #1E293B;
+}
+
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg-primary, #F8FAFC);
+
+  // Ensure the layout takes full viewport
+  width: 100vw;
+  position: relative;
+}
+
+.admin-main-content {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  min-height: 100vh;
+  background: var(--bg-primary, #F8FAFC);
+  
+  // Ensure content doesn't overflow
+  overflow-x: hidden;
+  position: relative;
+}
+
+// Global Theme Toggle (Top Right Corner)
+.global-theme-toggle {
+  position: fixed;
+  top: 24px;
+  right: 32px;
+  z-index: 100;
+
+  .theme-toggle-btn {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #3a72ec;
+    border-color: #3a72ec;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--text-primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    &:hover {
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      background: linear-gradient(135deg, #3a72ec 0%, #8b5cf6 100%);
+      border-color: #3a72ec;
+      color: #FFFFFF;
+
+      svg {
+        color: #FFFFFF;
+      }
+    }
+
+    &:active {
+      transform: translateY(0) scale(0.95);
+    }
+
+    svg {
+      stroke-width: 2;
+      transition: all 0.3s ease;
+    }
+  }
+}
+
+// Dark mode theme toggle styling
+:host-context([data-theme="dark"]) {
+  .theme-toggle-btn {
+    background: linear-gradient(135deg, #3a72ec 0%, #8b5cf6 100%);
+    border-color: #3a72ec;
+
+    &:hover {
+      background: #3a72ec;
+      border-color: #3a72ec;
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  :host {
+    --sidebar-width: 260px;
+  }
+  
+  .admin-main-content {
+    margin-left: 0;
+    padding-top: 0;
+  }
+  
+  .admin-layout {
+    position: relative;
+  }
+}

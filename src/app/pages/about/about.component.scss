@@ -1,0 +1,936 @@
+// About Container
+.about-container {
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+  background: #ffffff; // Changed to pure white like home page
+  padding: 60px 0 0 0; // Reduced top padding to let content start higher behind navbar
+  margin-top: 20px; // Negative margin to allow content to start behind navbar
+  padding-top: 100px; // Compensate for negative margin + navbar height
+  
+  // Dark mode background
+  :host-context(.dark) & {
+    background: #0f172a; // Changed to solid dark background like home page
+  }
+}
+
+.section-content {
+  max-width: 1300px; // Increased from 1200px to utilize more screen space
+  margin: 0 auto;
+  padding: 0 3rem; // Increased padding for better spacing
+  
+  @media (max-width: 768px) {
+    padding: 0 1.5rem; // Responsive padding for mobile
+  }
+  
+  // Add proper spacing between sections  
+  + .section-content {
+    margin-top: 3rem;
+  }
+}
+
+.section-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  text-align: center;
+  margin-top: -30px;
+  margin-bottom: 1.5rem; // Increased from 1rem for better spacing
+  color: #3A72EC; // Use primary brand color
+  
+  :host-context(.dark) & {
+    color: #4a82fc;
+  }
+}
+
+.section-subtitle {
+  font-size: 1.1rem;
+  color: #64748b;
+  text-align: center;
+  margin-bottom: 3rem; // Increased for better visual hierarchy
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  
+  :host-context(.dark) & {
+    color: #94a3b8;
+  }
+}
+
+.highlight-text {
+  color: #3A72EC; // Use primary brand color instead of gradient
+  font-weight: 800;
+  
+  :host-context(.dark) & {
+    color: #4a82fc;
+  }
+}
+
+// Section 1: Website Description
+.website-description-section {
+  padding: 2rem 0; // Optimized spacing
+  margin-bottom: 1rem;
+  
+  .description-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr; // Give more space to image
+    gap: 3rem;
+    align-items: start; // Changed from center to start for better alignment
+    
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+  
+  .description-text {
+    .section-title {
+      text-align: left;
+      margin-bottom: 1.5rem;
+    }
+    
+    .description-paragraph {
+      font-size: 1rem; // Reduced font size
+      line-height: 1.6; // Tighter line height
+      color: #475569;
+      margin-bottom: 1rem; // Reduced margin
+      
+      :host-context(.dark) & {
+        color: #cbd5e1;
+      }
+    }
+    
+    .feature-highlights {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem; // Reduced gap
+      margin-top: 1.5rem;
+      
+      .feature-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.6rem 0.8rem; // Reduced padding for smaller cards
+        background: rgba(58, 114, 236, 0.15); // Changed to match floating nav glassmorphism
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border-radius: 12px;
+        border: 1px solid rgba(58, 114, 236, 0.25); // Changed to match floating nav
+        box-shadow: 0 8px 32px rgba(58, 114, 236, 0.15); // Changed to match floating nav
+        transition: all 0.3s ease;
+        
+        :host-context(.dark) & {
+          background: rgba(58, 114, 236, 0.2);
+          border: 1px solid rgba(58, 114, 236, 0.35);
+          box-shadow: 0 8px 32px rgba(58, 114, 236, 0.25);
+        }
+        
+        &:hover {
+          transform: translateX(5px);
+          box-shadow: 0 12px 40px rgba(58, 114, 236, 0.15);
+          border-color: rgba(58, 114, 236, 0.3);
+          
+          :host-context(.dark) & {
+            box-shadow: 0 12px 40px rgba(74, 130, 252, 0.25);
+            border-color: rgba(74, 130, 252, 0.4);
+          }
+        }
+        
+        .feature-icon {
+          width: 36px; // Slightly smaller
+          height: 36px;
+          background: #3A72EC; // Use primary color instead of gradient
+          border-radius: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          flex-shrink: 0;
+        }
+        
+        span {
+          font-weight: 600;
+          color: #334155;
+          font-size: 0.95rem; // Slightly smaller
+          
+          :host-context(.dark) & {
+            color: #e2e8f0;
+          }
+        }
+      }
+    }
+  }
+  
+  .description-image {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+    height: 475px; // Increased height for better proportion
+    margin-top: 2px;
+    
+    :host-context(.dark) & {
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+    
+    .about-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .image-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(58, 114, 236, 0.8), rgba(139, 92, 246, 0.8)); // Gradient only for overlay
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: all 0.3s ease;
+      
+      .overlay-content {
+        text-align: center;
+        color: white;
+        
+        h3 {
+          font-size: 1.5rem;
+          font-weight: 700;
+          margin-bottom: 0.5rem;
+        }
+        
+        p {
+          font-size: 1rem;
+          opacity: 0.9;
+        }
+      }
+    }
+    
+    &:hover {
+      .about-image {
+        transform: scale(1.05);
+      }
+      
+      .image-overlay {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+// Section 2: Events Helpful
+.events-helpful-section {
+  padding: 3.2rem 0; // Optimized spacing
+  margin-bottom: 1rem;
+  
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem; // Reduced gap
+    
+    .benefit-card {
+      background: rgba(58, 114, 236, 0.15); // Changed to match floating nav glassmorphism
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border-radius: 20px;
+      padding: 1.5rem; // Reduced padding
+      text-align: center;
+      border: 1px solid rgba(58, 114, 236, 0.25); // Changed to match floating nav
+      box-shadow: 0 8px 32px rgba(58, 114, 236, 0.15); // Changed to match floating nav
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      
+      :host-context(.dark) & {
+        background: rgba(58, 114, 236, 0.2);
+        border: 1px solid rgba(58, 114, 236, 0.35);
+        box-shadow: 0 8px 32px rgba(58, 114, 236, 0.25);
+      }
+      
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: #3A72EC; // Use primary color
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+      }
+      
+      &:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(58, 114, 236, 0.15);
+        
+        :host-context(.dark) & {
+          box-shadow: 0 20px 40px rgba(74, 130, 252, 0.25);
+        }
+        
+        &::before {
+          transform: scaleX(1);
+        }
+      }
+      
+      .benefit-icon {
+        width: 60px; // Slightly smaller
+        height: 60px;
+        background: #3A72EC; // Use primary color instead of gradient
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.2rem; // Reduced margin
+        color: white;
+        
+        svg {
+          filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+      }
+      
+      .benefit-title {
+        font-size: 1.2rem; // Slightly smaller
+        font-weight: 700;
+        color: #334155;
+        margin-bottom: 0.8rem; // Reduced margin
+        
+        :host-context(.dark) & {
+          color: #e2e8f0;
+        }
+      }
+      
+      .benefit-description {
+        font-size: 0.95rem; // Slightly smaller
+        line-height: 1.5; // Tighter line height
+        color: #64748b;
+        
+        :host-context(.dark) & {
+          color: #94a3b8;
+        }
+      }
+    }
+  }
+}
+
+// Section 3: Events Purpose
+.events-purpose-section {
+  padding: 3.2rem 0; // Optimized spacing
+  margin-bottom: 1rem;
+  
+  .purpose-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr; // Image gets more space on left
+    gap: 3.35rem;
+    align-items: start; // Changed from center to start for better alignment
+    
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+  
+  .purpose-image {
+    order: 1; // Image on left
+    
+    @media (max-width: 768px) {
+      order: 1; // Keep image on top for mobile
+    }
+    
+    .purpose-img {
+      width: 100%;
+      height: 500px; // Increased to match welcome section image height
+      object-fit: cover;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+      
+      :host-context(.dark) & {
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      }
+    }
+  }
+  
+  .purpose-content {
+    order: 2; // Text on right
+    
+    @media (max-width: 768px) {
+      order: 2;
+    }
+    
+    .section-title {
+      text-align: left;
+      margin-bottom: 1.2rem; // Reduced margin
+    }
+    
+    .purpose-intro {
+      font-size: 1rem; // Reduced from 1.1rem
+      line-height: 1.6; // Tighter line height
+      color: #475569;
+      margin-bottom: 2rem; // Reduced margin
+      
+      :host-context(.dark) & {
+        color: #cbd5e1;
+      }
+    }
+    
+    .purpose-items {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem; // Reduced gap
+      
+      .purpose-item {
+        display: flex;
+        gap: 1.2rem; // Reduced gap
+        align-items: flex-start;
+        
+        .purpose-number {
+          width: 42px; // Slightly smaller
+          height: 42px;
+          background: #3A72EC; // Use primary color instead of gradient
+          color: white;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 700;
+          font-size: 1rem; // Slightly smaller
+          flex-shrink: 0;
+        }
+        
+        .purpose-details {
+          h4 {
+            font-size: 1.1rem; // Slightly smaller
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 0.4rem; // Reduced margin
+            
+            :host-context(.dark) & {
+              color: #e2e8f0;
+            }
+          }
+          
+          p {
+            font-size: 0.95rem; // Slightly smaller
+            line-height: 1.5; // Tighter line height
+            color: #64748b;
+            
+            :host-context(.dark) & {
+              color: #94a3b8;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Section 4: Workflow
+.workflow-section {
+  padding: 3.2rem 0; // Optimized spacing
+  margin-bottom: 1rem;
+  
+  .workflow-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem; // Reduced gap
+    align-items: center;
+    
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+  
+  .workflow-steps {
+    .workflow-step {
+      display: flex;
+      gap: 1.2rem; // Reduced gap
+      margin-bottom: 2rem; // Reduced margin
+      position: relative;
+      
+      &:last-child {
+        margin-bottom: 0;
+        
+        .step-connector {
+          display: none;
+        }
+      }
+      
+      .step-connector {
+        position: absolute;
+        left: 24px;
+        top: 48px;
+        width: 2px;
+        height: 40px; // Reduced height
+        background: #3A72EC; // Use primary color
+        opacity: 0.3;
+      }
+      
+      .step-circle {
+        width: 42px; // Slightly smaller
+        height: 42px;
+        background: #3A72EC; // Use primary color instead of gradient
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        box-shadow: 0 4px 16px rgba(58, 114, 236, 0.3);
+        
+        .step-number {
+          color: white;
+          font-weight: 700;
+          font-size: 1rem; // Slightly smaller
+        }
+      }
+      
+      .step-content {
+        flex: 1;
+        padding-top: 0.3rem; // Reduced padding
+        
+        .step-title {
+          font-size: 1.1rem; // Slightly smaller
+          font-weight: 700;
+          color: #334155;
+          margin-bottom: 0.4rem; // Reduced margin
+          
+          :host-context(.dark) & {
+            color: #e2e8f0;
+          }
+        }
+        
+        .step-description {
+          font-size: 0.95rem; // Slightly smaller
+          line-height: 1.5; // Tighter line height
+          color: #64748b;
+          
+          :host-context(.dark) & {
+            color: #94a3b8;
+          }
+        }
+      }
+    }
+  }
+  
+  .workflow-diagram {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(58, 114, 236, 0.15); // Changed to match floating nav glassmorphism
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 2rem; // Reverted to original padding
+    border: 1px solid rgba(58, 114, 236, 0.25); // Changed to match floating nav
+    box-shadow: 0 8px 32px rgba(58, 114, 236, 0.15); // Changed to match floating nav
+    min-height: auto; // Reverted to auto
+    
+    :host-context(.dark) & {
+      background: rgba(58, 114, 236, 0.2);
+      border: 1px solid rgba(58, 114, 236, 0.35);
+      box-shadow: 0 8px 32px rgba(58, 114, 236, 0.25);
+    }
+    
+    .workflow-svg {
+      width: 100%; // Use full width
+      height: 400px; // Increased only the diagram height for prominence
+      max-width: 900px; // Increased maximum width for better visibility
+      
+      .workflow-node {
+        filter: drop-shadow(0 4px 12px rgba(58, 114, 236, 0.4));
+        
+        :host-context(.dark) & {
+          filter: drop-shadow(0 4px 12px rgba(74, 130, 252, 0.5));
+        }
+      }
+      
+      .workflow-hub {
+        filter: drop-shadow(0 6px 16px rgba(139, 92, 246, 0.5));
+        
+        :host-context(.dark) & {
+          filter: drop-shadow(0 6px 16px rgba(155, 108, 246, 0.6));
+        }
+      }
+      
+      .workflow-line {
+        stroke: #3A72EC;
+        stroke-width: 2;
+        opacity: 0.7;
+        
+        :host-context(.dark) & {
+          stroke: #4a82fc;
+        }
+      }
+      
+      .node-text, .hub-text {
+        fill: white;
+        font-size: 11px;
+        font-weight: 700;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+      }
+    }
+  }
+}
+
+// Section 5: Team
+.team-section {
+  padding: 80px 0;
+  background: #ffffff; // Changed to match other sections
+  color: #1e293b; // Use dark text for light background
+  
+  // Dark mode background
+  :host-context(.dark) & {
+    background: #0f172a;
+    color: #f1f5f9;
+  }
+  
+  .section-title {
+    font-size: 2.5rem;
+    margin-bottom: 40px; // Increased from 16px for more padding
+    text-align: center;
+    font-weight: 700;
+    color: #3A72EC; // Use primary brand color
+    
+    :host-context(.dark) & {
+      color: #4a82fc;
+    }
+  }
+  
+  .section-subtitle {
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 60px;
+    color: #64748b; // Use consistent subtitle color
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    
+    :host-context(.dark) & {
+      color: #94a3b8;
+    }
+  }
+  
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); // Fixed 4 columns for 1300px layout
+    gap: 24px; // Reduced gap for better fit
+    max-width: 1300px; // Match other sections
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  .team-card {
+    background: rgba(58, 114, 236, 0.15); // Changed to match other cards
+    border: 1px solid rgba(58, 114, 236, 0.2);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    backdrop-filter: blur(15px); // Add glassmorphism effect
+    
+    :host-context(.dark) & {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    &:hover {
+      transform: translateY(-5px);
+    }
+  }
+  
+  .team-card-content {
+    padding: 24px;
+    text-align: center;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .member-avatar {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 20px;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid rgba(58, 114, 236, 0.3); // Changed to match theme
+      
+      :host-context(.dark) & {
+        border: 3px solid rgba(255, 255, 255, 0.3);
+      }
+    }
+  }
+  
+  .member-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .member-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #1e293b; // Dark text for light background
+    
+    :host-context(.dark) & {
+      color: #f1f5f9;
+    }
+  }
+  
+  .member-role {
+    font-size: 1rem;
+    color: #3A72EC; // Use primary color for role
+    margin-bottom: 16px;
+    font-weight: 500;
+    
+    :host-context(.dark) & {
+      color: #4a82fc;
+    }
+  }
+  
+  .member-bio {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    color: #64748b; // Use consistent subtitle color
+    flex: 1;
+    
+    :host-context(.dark) & {
+      color: #94a3b8;
+    }
+  }
+  
+  .member-skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .skill-tag {
+    padding: 4px 12px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); // Gradient to match design theme
+    border-radius: 16px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: white;
+    
+    :host-context(.dark) & {
+      background: linear-gradient(135deg, #4a82fc 0%, #8b5cf6 100%); // Adjusted for dark mode
+    }
+  }
+  
+  .member-social {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+  
+  .social-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: rgba(102, 126, 234, 0.2); // Purple-blue tint to match theme
+    border-radius: 50%;
+    color: #667eea; // Purple-blue color matching gradient
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    
+    :host-context(.dark) & {
+      background: rgba(255, 255, 255, 0.15); // Light background for dark mode
+      color: #e2e8f0; // Light grey-white for better visibility
+    }
+    
+    &:hover {
+      background: rgba(102, 126, 234, 0.35);
+      transform: scale(1.1);
+      color: #5a67d8; // Slightly darker on hover
+      
+      :host-context(.dark) & {
+        background: rgba(255, 255, 255, 0.25);
+        color: #ffffff; // Pure white on hover in dark mode
+      }
+    }
+  }
+  
+  @media (max-width: 768px) {
+    padding: 60px 0;
+    
+    .section-title {
+      font-size: 2rem;
+    }
+    
+    .team-grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+      padding: 0 16px;
+    }
+    
+    .team-card-content {
+      padding: 20px;
+    }
+    
+    .member-avatar {
+      width: 100px;
+      height: 100px;
+    }
+  }
+  
+  @media (max-width: 1200px) {
+    .team-grid {
+      grid-template-columns: repeat(2, 1fr); // 2 columns on tablet
+    }
+  }
+}// Section 6: Sponsors
+.sponsors-section {
+  padding: 2rem 0; // Optimized spacing
+  margin-bottom: 1rem;
+  
+  .sponsors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    
+    .sponsor-card {
+      background: rgba(58, 114, 236, 0.15); // Changed to match floating nav glassmorphism
+      backdrop-filter: blur(15px);
+      border-radius: 16px;
+      padding: 2rem;
+      text-align: center;
+      border: 1px solid rgba(58, 114, 236, 0.25); // Changed to match floating nav
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(58, 114, 236, 0.15); // Added box shadow to match other cards
+      
+      :host-context(.dark) & {
+        background: rgba(58, 114, 236, 0.2);
+        border: 1px solid rgba(58, 114, 236, 0.35);
+        box-shadow: 0 8px 32px rgba(58, 114, 236, 0.25);
+      }
+      
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(58, 114, 236, 0.15);
+        
+        :host-context(.dark) & {
+          box-shadow: 0 15px 30px rgba(74, 130, 252, 0.25);
+        }
+        
+        .sponsor-overlay {
+          opacity: 1;
+        }
+      }
+      
+      .sponsor-logo {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 1rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #f8fafc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        :host-context(.dark) & {
+          background: #1e293b;
+        }
+        
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          padding: 0.5rem;
+        }
+      }
+      
+      .sponsor-info {
+        .sponsor-name {
+          font-size: 1.1rem;
+          font-weight: 700;
+          color: #334155;
+          margin-bottom: 0.5rem;
+          
+          :host-context(.dark) & {
+            color: #e2e8f0;
+          }
+        }
+        
+        .sponsor-description {
+          font-size: 0.9rem;
+          color: #64748b;
+          line-height: 1.5;
+          
+          :host-context(.dark) & {
+            color: #94a3b8;
+          }
+        }
+      }
+      
+      .sponsor-overlay {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        width: 32px;
+        height: 32px;
+        background: linear-gradient(135deg, #3a72ec, #8b5cf6);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .about-container {
+    padding-top: 60px;
+  }
+  
+  .section-content {
+    padding: 0 1rem;
+  }
+  
+  .website-description-section,
+  .events-purpose-section {
+    .description-grid,
+    .purpose-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+  
+  .benefits-grid,
+  .sponsors-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .workflow-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .team-cards {
+    gap: 1rem;
+    
+    .team-card {
+      flex: 0 0 calc(100% - 1rem);
+    }
+  }
+}

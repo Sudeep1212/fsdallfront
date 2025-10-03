@@ -1,0 +1,17 @@
+<!-- Main Application Layout -->
+<div class="app-container" [class.admin-mode]="isAdminRoute">
+  <!-- Navigation Bar (hidden for admin routes) -->
+  <app-navbar *ngIf="!isAdminRoute"></app-navbar>
+  
+  <!-- Main Content Area -->
+  <main class="main-content" [class.admin-layout]="isAdminRoute">
+    <div class="page-wrapper" [class.no-padding]="isAdminRoute">
+      <!-- Router Outlet for Page Content -->
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+  
+  <!-- Chatbot System (Floating across all pages, hidden for admin routes) -->
+  <app-chatbot-icon *ngIf="!isAdminRoute"></app-chatbot-icon>
+  <app-chatbot-sidebar *ngIf="!isAdminRoute"></app-chatbot-sidebar>
+</div>

@@ -1,0 +1,374 @@
+<div class="registration-container" [class.loading]="isLoading">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-overlay">
+    <div class="loading-spinner"></div>
+    <p>Loading event details...</p>
+  </div>
+
+  <!-- Main Content -->
+  <div *ngIf="!isLoading && event" class="registration-content">
+    
+    <!-- Desktop Two-Column Layout -->
+    <div class="desktop-layout">
+      
+      <!-- Left Column - Event Image -->
+      <div class="image-section">
+        <div class="event-visual-card">
+          <div class="event-image">
+            <!-- Using actual event image from home component -->
+            <img [src]="getEventImage(event.event_id)" 
+                 [alt]="event.event_name + ' event image'"
+                 onerror="this.src='/assets/images/default-event.svg'">
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column - Event Details -->
+      <div class="details-section">
+        <div class="event-details-card">
+          
+          <!-- Event Title -->
+          <h1 class="event-title">{{event.event_name}}</h1>
+
+          <!-- Event Information -->
+          <div class="event-info">
+            
+            <!-- Date and Time Row - Two side-by-side containers -->
+            <div class="date-time-row">
+              <!-- Date Container -->
+              <div class="info-container date-time-container">
+                <div class="info-item">
+                  <svg width="24" height="24" viewBox="0 0 24 24" class="info-icon">
+                    <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/>
+                  </svg>
+                  <div class="info-content">
+                    <span class="info-label">Dates:</span>
+                    <span class="info-value">
+                      {{formatDate(event.event_start_date)}} 
+                      <span *ngIf="event.event_end_date && event.event_end_date !== event.event_start_date">
+                        to {{formatDate(event.event_end_date)}}
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Time Container -->
+              <div class="info-container date-time-container" *ngIf="event.event_time">
+                <div class="info-item">
+                  <svg width="24" height="24" viewBox="0 0 24 24" class="info-icon">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                  </svg>
+                  <div class="info-content">
+                    <span class="info-label">Time:</span>
+                    <span class="info-value">{{formatTime(event.event_time)}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Description Container -->
+            <div class="info-container description-container" *ngIf="event.event_description">
+              <div class="info-item full-width">
+                <svg width="24" height="24" viewBox="0 0 24 24" class="info-icon">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                </svg>
+                <div class="info-content">
+                  <span class="info-label">Description:</span>
+                  <p class="info-description">{{event.event_description}}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Organized By Container -->
+            <div class="info-container organizer-container" *ngIf="event.club">
+              <div class="info-item full-width">
+                <svg width="24" height="24" viewBox="0 0 24 24" class="info-icon">
+                  <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63c-.34-.98-1.26-1.67-2.36-1.67h-1.6c-.83 0-1.58.34-2.12.89l-3.33 3.33c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0L15 10.5V11c0 1.1.9 2 2 2h1v9h2zM12.5 11.5c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5S11 9.17 11 10s.67 1.5 1.5 1.5zM5.5 6c1.11 0 2-.89 2-2s-.89-2-2-2-2 .89-2 2 .89 2 2 2zm1.5 2h-3C2.67 8 2 8.67 2 9.5v7h1.5v7h3v-7H8v-7C8 8.67 7.33 8 6.5 8z"/>
+                </svg>
+                <div class="info-content">
+                  <span class="info-label">Organized by:</span>
+                  <span class="info-value">{{event.club.name}}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Venue Container -->
+            <div class="info-container venue-container" *ngIf="event.venue">
+              <div class="info-item full-width">
+                <svg width="24" height="24" viewBox="0 0 24 24" class="info-icon">
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                </svg>
+                <div class="info-content">
+                  <span class="info-label">Venue:</span>
+                  <span class="info-value">{{event.venue.name}}<span *ngIf="event.venue.floor">, Floor {{event.venue.floor}}</span></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Judge Container -->
+            <div class="info-container judge-container" *ngIf="event.judge">
+              <div class="info-item full-width">
+                <svg width="24" height="24" viewBox="0 0 24 24" class="info-icon">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+                <div class="info-content">
+                  <span class="info-label">Judge:</span>
+                  <span class="info-value">{{event.judge.judge_name}}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Event Fee Container -->
+            <div class="info-container fee-container">
+              <div class="event-fee-highlight">
+                <div class="fee-content">
+                  <span class="fee-label">Event Fee</span>
+                  <span class="fee-amount">{{formatEventFee(eventFee)}}</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Register Button -->
+          <button class="register-btn" 
+                  (click)="openRegistrationModal()"
+                  [disabled]="isRegistering">
+            <span *ngIf="!isRegistering">Register Now</span>
+            <span *ngIf="isRegistering">Registering...</span>
+          </button>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Single-Column Layout -->
+    <div class="mobile-layout">
+      <!-- Mobile content will stack vertically -->
+      <div class="mobile-image">
+        <img [src]="getEventImage(event.event_id)" 
+             [alt]="event.event_name + ' event image'"
+             onerror="this.src='/assets/images/default-event.svg'">
+      </div>
+      
+      <div class="mobile-details">
+        <h1 class="event-title">{{event.event_name}}</h1>
+        
+        <div class="event-info">
+          <!-- Mobile containers use the same structure as desktop -->
+          <div class="info-container date-time-container">
+            <div class="info-item">
+              <svg width="24" height="24" viewBox="0 0 24 24" class="info-icon">
+                <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/>
+              </svg>
+              <div class="info-content">
+                <span class="info-label">Dates:{{formatDate(event.event_start_date)}}</span>
+                <span class="info-value">
+                  <span *ngIf="event.event_end_date && event.event_end_date !== event.event_start_date">
+                    to {{formatDate(event.event_end_date)}}
+                  </span>
+                </span>
+              </div>
+            </div>
+            
+            <div class="info-item" *ngIf="event.event_time">
+              <svg width="24" height="24" viewBox="0 0 24 24" class="info-icon">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+              </svg>
+              <div class="info-content">
+                <span class="info-label">Time:</span>
+                <span class="info-value">{{formatTime(event.event_time)}}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-container description-container" *ngIf="event.event_description">
+            <div class="info-item full-width">
+              <svg width="24" height="24" viewBox="0 0 24 24" class="info-icon">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+              </svg>
+              <div class="info-content">
+                <span class="info-label">Description:</span>
+                <p class="info-description">{{event.event_description}}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-container organizer-container" *ngIf="event.club">
+            <div class="info-item full-width">
+              <svg width="24" height="24" viewBox="0 0 24 24" class="info-icon">
+                <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63c-.34-.98-1.26-1.67-2.36-1.67h-1.6c-.83 0-1.58.34-2.12.89l-3.33 3.33c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0L15 10.5V11c0 1.1.9 2 2 2h1v9h2z"/>
+              </svg>
+              <div class="info-content">
+                <span class="info-label">Organized by:</span>
+                <span class="info-value">{{event.club.name}}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-container venue-container" *ngIf="event.venue">
+            <div class="info-item full-width">
+              <svg width="24" height="24" viewBox="0 0 24 24" class="info-icon">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+              </svg>
+              <div class="info-content">
+                <span class="info-label">Venue:</span>
+                <span class="info-value">{{event.venue.name}}<span *ngIf="event.venue.floor">, Floor {{event.venue.floor}}</span></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-container judge-container" *ngIf="event.judge">
+            <div class="info-item full-width">
+              <svg width="24" height="24" viewBox="0 0 24 24" class="info-icon">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+              </svg>
+              <div class="info-content">
+                <span class="info-label">Judge:</span>
+                <span class="info-value">{{event.judge.judge_name}}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-container fee-container">
+            <div class="event-fee-highlight">
+              <svg width="20" height="20" viewBox="0 0 24 24" class="fee-icon">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91 2.28.6 4.18 1.77 4.18 3.84 0 1.91-1.65 2.95-3.12 3.21z"/>
+              </svg>
+              <div class="fee-content">
+                <span class="fee-label">Event Fee</span>
+                <span class="fee-amount">{{formatEventFee(eventFee)}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="register-btn" 
+                (click)="openRegistrationModal()"
+                [disabled]="isRegistering">
+          <span *ngIf="!isRegistering">Register Now</span>
+          <span *ngIf="isRegistering">Registering...</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Registration Modal -->
+  <div class="modal-overlay" *ngIf="isModalOpen" (click)="closeModal()">
+    <div class="registration-modal" (click)="$event.stopPropagation()">
+      
+      <div class="modal-header">
+        <h2>Event Registration</h2>
+        <p class="modal-subtitle">Confirm Your Details</p>
+        <button class="modal-close" (click)="closeModal()">&times;</button>
+      </div>
+
+      <form [formGroup]="registrationForm" (ngSubmit)="onSubmitRegistration()" class="registration-form">
+        
+        <!-- Name Field -->
+        <div class="form-field">
+          <label for="name">Name</label>
+          <input type="text" 
+                 id="name" 
+                 formControlName="name"
+                 [class.error]="getFieldError('name')"
+                 placeholder="Enter your full name">
+          <span class="error-message" *ngIf="getFieldError('name')">{{getFieldError('name')}}</span>
+        </div>
+
+        <!-- College Field -->
+        <div class="form-field">
+          <label for="college">College</label>
+          <input type="text" 
+                 id="college" 
+                 formControlName="college"
+                 [class.error]="getFieldError('college')"
+                 placeholder="Enter your college name">
+          <span class="error-message" *ngIf="getFieldError('college')">{{getFieldError('college')}}</span>
+        </div>
+
+        <!-- Contact Field -->
+        <div class="form-field">
+          <label for="contact">Contact</label>
+          <input type="tel" 
+                 id="contact" 
+                 formControlName="contact"
+                 [class.error]="getFieldError('contact')"
+                 placeholder="Enter your contact number">
+          <span class="error-message" *ngIf="getFieldError('contact')">{{getFieldError('contact')}}</span>
+        </div>
+
+        <!-- Email Field -->
+        <div class="form-field">
+          <label for="email">Email</label>
+          <input type="email" 
+                 id="email" 
+                 formControlName="email"
+                 [class.error]="getFieldError('email')"
+                 placeholder="Enter your email address">
+          <span class="error-message" *ngIf="getFieldError('email')">{{getFieldError('email')}}</span>
+        </div>
+
+        <!-- Event Fee Display -->
+        <div class="event-fee-display compact">
+          <div class="fee-content-compact">
+            <span class="fee-label-small">Registration Fee</span>
+            <span class="fee-value-large">{{formatEventFee(eventFee)}}</span>
+          </div>
+        </div>
+
+        <!-- Helper Text -->
+        <p class="helper-text">
+          After registration you will be able to download your event ticket. Please bring the ticket and pay in cash at the venue if payment is required.
+        </p>
+
+        <!-- Error Message -->
+        <div class="error-message" *ngIf="errorMessage">{{errorMessage}}</div>
+
+        <!-- Submit Button -->
+        <button type="submit" 
+                class="submit-btn"
+                [disabled]="isRegistering || registrationForm.invalid">
+          <span *ngIf="!isRegistering">Complete Registration</span>
+          <span *ngIf="isRegistering">Processing...</span>
+        </button>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div class="modal-overlay success-overlay" *ngIf="showSuccess" (click)="backToHome()">
+    <div class="success-modal" (click)="$event.stopPropagation()">
+      
+      <div class="success-content">
+        <div class="success-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" class="check-icon">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          </svg>
+        </div>
+        
+        <h2>Congratulations!</h2>
+        <p class="success-message">You have successfully booked your Event Ticket. You can download your E-Ticket Now</p>
+        
+        <div class="success-actions">
+          <button class="download-btn" (click)="downloadTicket()">
+            <svg width="16" height="16" viewBox="0 0 24 24" class="download-icon">
+              <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+            </svg>
+            Download E-Ticket
+          </button>
+          <button class="home-btn" (click)="backToHome()">Back to Home</button>
+        </div>
+        
+        <p class="participant-id" *ngIf="participantId">
+          Participant ID: <strong>{{participantId}}</strong>
+        </p>
+      </div>
+      
+    </div>
+  </div>
+
+</div>

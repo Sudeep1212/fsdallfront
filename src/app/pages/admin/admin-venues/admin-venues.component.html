@@ -1,0 +1,218 @@
+<div class="admin-venues-module">
+  <!-- Module Header -->
+  <div class="module-header">
+    <h1>Venues Module</h1>
+  </div>
+
+  <!-- Stats Container -->
+  <div class="stats-container">
+    <div class="stats-content">
+      <div class="stat-item">
+        <div class="stat-label">Total Venues</div>
+        <div class="stat-value">{{ venues.length }}</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Active Records</div>
+        <div class="stat-value">{{ filteredVenues.length }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions Bar -->
+  <div class="actions-bar">
+    <!-- Search -->
+    <div class="search-container">
+      <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <circle cx="11" cy="11" r="8" stroke-width="2"/>
+        <path d="m21 21-4.35-4.35" stroke-width="2"/>
+      </svg>
+      <input 
+        type="text" 
+        class="search-input" 
+        placeholder="Search by venue name or floor..."
+        [(ngModel)]="searchTerm"
+        (input)="filterVenues()"
+      />
+      <button class="clear-btn" *ngIf="searchTerm" (click)="clearSearch()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <line x1="18" y1="6" x2="6" y2="18" stroke-width="2"/>
+          <line x1="6" y1="6" x2="18" y2="18" stroke-width="2"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Create Button -->
+    <button class="create-btn" (click)="openCreateModal()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <circle cx="12" cy="12" r="10" stroke-width="2"/>
+        <line x1="12" y1="8" x2="12" y2="16" stroke-width="2"/>
+        <line x1="8" y1="12" x2="16" y2="12" stroke-width="2"/>
+      </svg>
+      Create Venue
+    </button>
+  </div>
+
+  <!-- Data Table -->
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Sr. No.</th>
+          <th>Venue Name</th>
+          <th>Floor</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let venue of filteredVenues; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ venue.name }}</td>
+          <td>Floor {{ venue.floor }}</td>
+          <td>
+            <button class="delete-btn" (click)="openDeleteModal(venue.venue_id!)" title="Delete Venue">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <polyline points="3 6 5 6 21 6" stroke-width="2"/>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke-width="2"/>
+                <line x1="10" y1="11" x2="10" y2="17" stroke-width="2"/>
+                <line x1="14" y1="11" x2="14" y2="17" stroke-width="2"/>
+              </svg>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredVenues.length === 0">
+          <td colspan="4" class="no-data">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <circle cx="12" cy="12" r="10" stroke-width="2"/>
+              <line x1="12" y1="8" x2="12" y2="12" stroke-width="2"/>
+              <line x1="12" y1="16" x2="12.01" y2="16" stroke-width="2"/>
+            </svg>
+            <p>{{ searchTerm ? 'No venues found matching your search' : 'No venues available' }}</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Create Modal -->
+  <div class="modal-overlay" *ngIf="showCreateModal" (click)="closeCreateModal()">
+    <div class="modal-container" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Create New Venue</h2>
+        <button class="close-btn" (click)="closeCreateModal()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <line x1="18" y1="6" x2="6" y2="18" stroke-width="2"/>
+            <line x1="6" y1="6" x2="18" y2="18" stroke-width="2"/>
+          </svg>
+        </button>
+      </div>
+
+      <form [formGroup]="venueForm" (ngSubmit)="onSubmit()" class="modal-form">
+        <div class="form-grid">
+          <!-- Venue Name -->
+          <div class="form-group full-width">
+            <label for="name">Venue Name *</label>
+            <input 
+              type="text" 
+              id="name" 
+              formControlName="name"
+              placeholder="Enter venue name"
+            />
+            <span class="error-text" *ngIf="venueForm.get('name')?.invalid && venueForm.get('name')?.touched">
+              Venue name is required (min 3 characters)
+            </span>
+          </div>
+
+          <!-- Floor -->
+          <div class="form-group full-width">
+            <label for="floor">Floor *</label>
+            <input 
+              type="number" 
+              id="floor" 
+              formControlName="floor"
+              placeholder="Enter floor number (0 for ground floor)"
+              min="0"
+            />
+            <span class="error-text" *ngIf="venueForm.get('floor')?.invalid && venueForm.get('floor')?.touched">
+              Floor number is required (must be 0 or greater)
+            </span>
+          </div>
+        </div>
+
+        <div class="error-banner" *ngIf="error">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <circle cx="12" cy="12" r="10" stroke-width="2"/>
+            <line x1="12" y1="8" x2="12" y2="12" stroke-width="2"/>
+            <line x1="12" y1="16" x2="12.01" y2="16" stroke-width="2"/>
+          </svg>
+          <span>{{ error }}</span>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" (click)="closeCreateModal()" [disabled]="loading">
+            Cancel
+          </button>
+          <button type="submit" class="btn-submit" [disabled]="loading || venueForm.invalid">
+            <span *ngIf="!loading">Create Venue</span>
+            <span *ngIf="loading">Creating...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Modal -->
+  <div class="modal-overlay" *ngIf="showDeleteModal" (click)="closeDeleteModal()">
+    <div class="modal-container delete-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Confirm Deletion</h2>
+        <button class="close-btn" (click)="closeDeleteModal()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <line x1="18" y1="6" x2="6" y2="18" stroke-width="2"/>
+            <line x1="6" y1="6" x2="18" y2="18" stroke-width="2"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="delete-content">
+        <div class="warning-icon">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke-width="2"/>
+            <line x1="12" y1="9" x2="12" y2="13" stroke-width="2"/>
+            <line x1="12" y1="17" x2="12.01" y2="17" stroke-width="2"/>
+          </svg>
+        </div>
+        <p class="delete-message">Are you sure you want to delete this venue?</p>
+        <p class="delete-warning">This will also delete all related events, volunteers, and budgets. This action cannot be undone.</p>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" (click)="closeDeleteModal()" [disabled]="loading">
+          No, Cancel
+        </button>
+        <button type="button" class="btn-delete" (click)="confirmDelete()" [disabled]="loading">
+          <span *ngIf="!loading">Yes, Delete</span>
+          <span *ngIf="loading">Deleting...</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Toast -->
+  <div class="toast success-toast" [class.show]="showSuccessToast">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke-width="2"/>
+      <polyline points="22 4 12 14.01 9 11.01" stroke-width="2"/>
+    </svg>
+    <span>{{ toastMessage }}</span>
+  </div>
+
+  <!-- Error Toast -->
+  <div class="toast error-toast" [class.show]="showErrorToast">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <circle cx="12" cy="12" r="10" stroke-width="2"/>
+      <line x1="15" y1="9" x2="9" y2="15" stroke-width="2"/>
+      <line x1="9" y1="9" x2="15" y2="15" stroke-width="2"/>
+    </svg>
+    <span>{{ toastMessage }}</span>
+  </div>
+</div>

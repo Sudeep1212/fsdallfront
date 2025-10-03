@@ -1,0 +1,45 @@
+<!-- Authentication Landing Page - Split Layout -->
+<div class="auth-landing-container">
+  <!-- Left Section - Admin -->
+  <div class="auth-section admin-section">
+    <div class="section-content">
+      <div class="section-badge">ADMIN</div>
+      <h1 class="section-title">For Administrators</h1>
+      <p class="section-description">
+        Manage events, oversee registrations, and coordinate with clubs. Access comprehensive tools to organize and monitor college activities.
+      </p>
+      
+      <button class="primary-btn" (click)="navigateToAdminLogin()">
+        Admin Login
+      </button>
+      
+      <div class="bottom-message">
+        <p>Need assistance?</p>
+        <a href="javascript:void(0)" class="link-text" (click)="navigateToSupport($event)">Contact Support</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Section - Students -->
+  <div class="auth-section student-section">
+    <div class="section-content">
+      <div class="section-badge">STUDENTS</div>
+      <h1 class="section-title">For Students</h1>
+      <p class="section-description">
+        Discover exciting events, register for activities, and stay connected with campus life. Join thousands of students in making memories.
+      </p>
+      
+      <button class="primary-btn" (click)="navigateToStudentLogin()">
+        Student Login
+      </button>
+      
+      <div class="bottom-message">
+        <p>Don't have an account?</p>
+        <a href="javascript:void(0)" class="link-text" (click)="navigateToStudentSignup($event)">Sign up</a>
+      </div>
+    </div>
+    
+    <!-- Background Image for Student Section -->
+    <div class="student-bg-image"></div>
+  </div>
+</div>

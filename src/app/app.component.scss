@@ -1,0 +1,180 @@
+// Main Application Component Styles
+// This file controls the overall application layout and global styling
+
+:host {
+  display: block;
+  min-height: 100vh;
+  position: relative;
+}
+
+// Main application container
+.app-container {
+  min-height: 100vh;
+  background: transparent !important; /* FORCE transparent to allow background image */
+  transition: all 0.3s ease;
+  position: relative;
+  overflow-x: hidden;
+  
+  // Remove padding to allow background image to start from navbar
+  padding-top: 0;
+  
+  // Dark mode styles
+  :host-context(.dark) & {
+    background: transparent !important; /* FORCE transparent in dark mode too */
+  }
+}
+
+// Main content area
+.main-content {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  margin-top: 0;
+  padding-top: 0;
+  
+  // Professional layout with proper spacing
+  .page-wrapper {
+    // Remove constraints for home page background to work seamlessly
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    
+    @media (max-width: 768px) {
+      padding: 0;
+    }
+  }
+}
+
+// Admin layout specific styles
+.app-container.admin-mode {
+  background: #F8FAFC;
+  
+  .main-content.admin-layout {
+    margin-top: 0;
+    
+    .page-wrapper.no-padding {
+      padding: 0;
+      max-width: none;
+    }
+  }
+}
+
+// Dark theme for admin mode
+:host-context([data-theme="dark"]) .app-container.admin-mode {
+  background: #0F172A;
+}
+
+// Router outlet styling for smooth transitions
+router-outlet + * {
+  animation: fadeInSlide 0.4s ease-out;
+}
+
+@keyframes fadeInSlide {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Loading state styles
+.app-loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  
+  .loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(58, 114, 236, 0.2);
+    border-top: 3px solid #3A72EC;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// Error boundary styles
+.app-error {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  
+  .error-content {
+    max-width: 500px;
+    
+    h1 {
+      font-size: 2rem;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+    }
+    
+    p {
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+    }
+    
+    .retry-button {
+      background: linear-gradient(135deg, #3A72EC, #5B8CEF);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(58, 114, 236, 0.3);
+      }
+    }
+  }
+}
+
+// Accessibility improvements
+.app-container {
+  // Focus management
+  &:focus-within {
+    outline: none;
+  }
+  
+  // Reduced motion support
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+// Print styles
+@media print {
+  .app-container {
+    padding-top: 0;
+    background: white !important;
+    
+    // Hide navigation in print
+    app-navbar {
+      display: none !important;
+    }
+  }
+}

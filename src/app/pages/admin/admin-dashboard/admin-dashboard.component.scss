@@ -1,0 +1,1189 @@
+// Modern Admin Dashboard Design
+// Luxurious Admin Dashboard - Premium Design System
+:host {
+  --primary: #6366F1;
+  --primary-hover: #5B21B6;
+  --primary-light: rgba(99, 102, 241, 0.1);
+  --primary-gradient: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+  
+  --secondary: #EC4899;
+  --secondary-light: rgba(236, 72, 153, 0.1);
+  
+  --accent: #10B981;
+  --accent-light: rgba(16, 185, 129, 0.1);
+  
+  --warning: #F59E0B;
+  --warning-light: rgba(245, 158, 11, 0.1);
+  
+  --error: #EF4444;
+  --error-light: rgba(239, 68, 68, 0.1);
+  
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
+  --text-inverse: #FFFFFF;
+  
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #FAFBFC;
+  --bg-tertiary: #F8FAFC;
+  --bg-card: #FFFFFF;
+  
+  --border: #E2E8F0;
+  --border-light: #F1F5F9;
+  
+  --radius: 16px;
+  --radius-sm: 12px;
+  --radius-lg: 24px;
+  
+  --shadow-subtle: 0 1px 3px 0 rgba(15, 23, 42, 0.08);
+  --shadow-soft: 0 4px 6px -1px rgba(15, 23, 42, 0.1), 0 2px 4px -2px rgba(15, 23, 42, 0.1);
+  --shadow-elegant: 0 10px 15px -3px rgba(15, 23, 42, 0.1), 0 4px 6px -2px rgba(15, 23, 42, 0.1);
+  --shadow-dramatic: 0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.1);
+  
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+// Dark theme - Sophisticated night mode
+:host-context([data-theme="dark"]) {
+  --text-primary: #F8FAFC;
+  --text-secondary: #CBD5E1;
+  --text-muted: #94A3B8;
+  --text-inverse: #0F172A;
+  
+  --bg-primary: #0F172A;
+  --bg-secondary: #1E293B;
+  --bg-tertiary: #334155;
+  --bg-card: #1E293B;
+  
+  --border: #334155;
+  --border-light: #475569;
+  
+  --shadow-subtle: 0 1px 3px 0 rgba(0, 0, 0, 0.5);
+  --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.6), 0 2px 4px -2px rgba(0, 0, 0, 0.6);
+  --shadow-elegant: 0 10px 15px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -2px rgba(0, 0, 0, 0.6);
+  --shadow-dramatic: 0 20px 25px -5px rgba(0, 0, 0, 0.7), 0 8px 10px -6px rgba(0, 0, 0, 0.7);
+}
+
+// Luxurious Dashboard Container
+.admin-dashboard {
+  padding: 32px;
+  background: var(--bg-primary);
+  min-height: 100vh;
+  margin-left: -20px;
+  margin-right: 15px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 200px;
+    background: var(--primary-gradient);
+    opacity: 0.03;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  }
+}
+
+// Module Header (consistent with other modules)
+.module-header {
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 1;
+
+  h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 8px 0;
+  }
+
+  .module-note {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: 0;
+    font-style: italic;
+  }
+}
+
+// Elegant Dashboard Header
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  position: relative;
+  z-index: 1;
+  
+  .header-content {
+    .dashboard-title {
+      font-size: 36px;
+      font-weight: 900;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin: 0 0 8px 0;
+      letter-spacing: -1px;
+      line-height: 1.2;
+    }
+
+    .dashboard-subtitle {
+      font-size: 16px;
+      color: var(--text-secondary);
+      margin: 0;
+      font-weight: 500;
+      opacity: 0.8;
+    }
+  }
+
+  .refresh-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 20px;
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: var(--shadow-subtle);
+
+    &:hover:not(:disabled) {
+      background: var(--primary);
+      color: var(--text-inverse);
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-elegant);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    svg {
+      &.spinning {
+        animation: spin 1s linear infinite;
+      }
+    }
+  }
+}
+
+// Stunning Welcome Banner - Exact Match to Reference
+  .welcome-banner {
+    background: linear-gradient(135deg, #3a72ec, #8b5cf6);;
+    color: white;
+    padding: 2rem;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .sync-btn {
+    position: absolute;
+    top: 1.5rem;
+    right: 2rem;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    z-index: 10;
+
+    &:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.3);
+      border-color: rgba(255, 255, 255, 0.4);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    svg.spinning {
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+  }
+
+  .welcome-content {
+    position: relative;
+    z-index: 2;
+  }
+
+  .welcome-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.2;
+  }
+
+  .welcome-subtitle {
+    font-size: 1rem;
+    opacity: 0.9;
+    margin: 0 0 1.5rem 0;
+    line-height: 1.4;
+  }
+
+  .welcome-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      gap: 0.75rem;
+      align-items: flex-start;
+    }
+  }
+
+  .action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+
+    &.primary {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(10px);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.3);
+        border-color: rgba(255, 255, 255, 0.4);
+        transform: translateY(-1px);
+      }
+    }
+
+    &.secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.3);
+        transform: translateY(-1px);
+      }
+    }
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }// Loading and Error States
+.loading-container, .error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+
+  .loading-spinner {
+    margin-bottom: 20px;
+    color: var(--primary-color);
+  }
+
+  p, h3 {
+    color: var(--text-secondary);
+    margin: 8px 0;
+  }
+
+  h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .retry-btn {
+    margin-top: 16px;
+    padding: 12px 24px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+
+    &:hover {
+      background: var(--primary-hover);
+    }
+  }
+}
+
+.error-container svg {
+  color: var(--error-color);
+  margin-bottom: 16px;
+}
+
+// Count Cards Grid - Dynamic Implementation
+.count-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+
+  &.second-row {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.count-card {
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: none;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  height: 130px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-top: 4px solid transparent;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  // Pastel color backgrounds matching reference image
+  &[data-entity="events"] {
+    background: linear-gradient(135deg, #E8F2FF 0%, #F0F8FF 100%);
+    border-top-color: #3B82F6;
+  }
+  
+  &[data-entity="clubs"] {
+    background: linear-gradient(135deg, #F3E8FF 0%, #FAF5FF 100%);
+    border-top-color: #8B5CF6;
+  }
+  
+  &[data-entity="participants"] {
+    background: linear-gradient(135deg, #ECFDF5 0%, #F0FDF4 100%);
+    border-top-color: #10B981;
+  }
+  
+  &[data-entity="registrations"] {
+    background: linear-gradient(135deg, #FEF3C7 0%, #FFFBEB 100%);
+    border-top-color: #F59E0B;
+  }
+  
+  &[data-entity="sponsors"] {
+    background: linear-gradient(135deg, #FEE2E2 0%, #FEF2F2 100%);
+    border-top-color: #EF4444;
+  }
+  
+  &[data-entity="venues"] {
+    background: linear-gradient(135deg, #E0F2FE 0%, #F0F9FF 100%);
+    border-top-color: #06B6D4;
+  }
+  
+  &[data-entity="volunteers"] {
+    background: linear-gradient(135deg, #FCE7F3 0%, #FDF2F8 100%);
+    border-top-color: #EC4899;
+  }
+  
+  &[data-entity="budgets"] {
+    background: linear-gradient(135deg, #F0FDF4 0%, #F7FEE7 100%);
+    border-top-color: #84CC16;
+  }
+  
+  &[data-entity="departments"] {
+    background: linear-gradient(135deg, #FFF7ED 0%, #FFFBEB 100%);
+    border-top-color: #F97316;
+  }
+  
+  &[data-entity="results"] {
+    background: linear-gradient(135deg, #EEF2FF 0%, #F5F3FF 100%);
+    border-top-color: #6366F1;
+  }
+  
+  &[data-entity="judges"] {
+    background: linear-gradient(135deg, #F0FDFA 0%, #ECFDF5 100%);
+    border-top-color: #14B8A6;
+  }
+  
+  &[data-entity="feedback"] {
+    background: linear-gradient(135deg, #FDF2F8 0%, #FEF7FF 100%);
+    border-top-color: #F43F5E;
+  }
+}
+
+.count-content {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex: 1;
+}
+
+.count-info {
+  flex: 1;
+}
+
+.count-number {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #1f2937;
+  line-height: 1;
+  display: block;
+  margin-bottom: 0.25rem;
+  letter-spacing: -0.025em;
+}
+
+.count-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #374151;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+.count-description {
+  font-size: 0.625rem;
+  font-weight: 400;
+  color: #6B7280;
+  line-height: 1.3;
+  display: block;
+}
+
+.count-icon-container {
+  display: flex;
+  align-items: flex-start;
+  margin-left: 1rem;
+}
+
+.count-icon {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  svg {
+    width: 1.125rem;
+    height: 1.125rem;
+    stroke-width: 2;
+  }
+}
+
+// Icon colors matching card themes
+.count-card[data-entity="events"] .count-icon {
+  background: rgba(59, 130, 246, 0.15);
+  svg { color: #3B82F6; }
+}
+
+.count-card[data-entity="clubs"] .count-icon {
+  background: rgba(139, 92, 246, 0.15);
+  svg { color: #8B5CF6; }
+}
+
+.count-card[data-entity="participants"] .count-icon {
+  background: rgba(16, 185, 129, 0.15);
+  svg { color: #10B981; }
+}
+
+.count-card[data-entity="registrations"] .count-icon {
+  background: rgba(245, 158, 11, 0.15);
+  svg { color: #F59E0B; }
+}
+
+.count-card[data-entity="sponsors"] .count-icon {
+  background: rgba(239, 68, 68, 0.15);
+  svg { color: #EF4444; }
+}
+
+.count-card[data-entity="venues"] .count-icon {
+  background: rgba(6, 182, 212, 0.15);
+  svg { color: #06B6D4; }
+}
+
+.count-card[data-entity="volunteers"] .count-icon {
+  background: rgba(236, 72, 153, 0.15);
+  svg { color: #EC4899; }
+}
+
+.count-card[data-entity="budgets"] .count-icon {
+  background: rgba(132, 204, 22, 0.15);
+  svg { color: #84CC16; }
+}
+
+.count-card[data-entity="departments"] .count-icon {
+  background: rgba(249, 115, 22, 0.15);
+  svg { color: #F97316; }
+}
+
+.count-card[data-entity="results"] .count-icon {
+  background: rgba(99, 102, 241, 0.15);
+  svg { color: #6366F1; }
+}
+
+.count-card[data-entity="judges"] .count-icon {
+  background: rgba(20, 184, 166, 0.15);
+  svg { color: #14B8A6; }
+}
+
+.count-card[data-entity="feedback"] .count-icon {
+  background: rgba(244, 63, 94, 0.15);
+  svg { color: #F43F5E; }
+}
+
+// Dark mode support for count cards
+:host-context([data-theme="dark"]) {
+  .count-card {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+    &:hover {
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    // Dark mode pastel backgrounds - LIGHTER VERSION
+    &[data-entity="events"] {
+      background: linear-gradient(135deg, rgba(96, 165, 250, 0.2) 0%, rgba(59, 130, 246, 0.25) 100%);
+      color: #e0f2fe;
+    }
+    
+    &[data-entity="clubs"] {
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(139, 92, 246, 0.25) 100%);
+      color: #faf5ff;
+    }
+    
+    &[data-entity="participants"] {
+      background: linear-gradient(135deg, rgba(52, 211, 153, 0.2) 0%, rgba(16, 185, 129, 0.25) 100%);
+      color: #d1fae5;
+    }
+    
+    &[data-entity="registrations"] {
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.2) 0%, rgba(245, 158, 11, 0.25) 100%);
+      color: #fef3c7;
+    }
+    
+    &[data-entity="sponsors"] {
+      background: linear-gradient(135deg, rgba(248, 113, 113, 0.2) 0%, rgba(239, 68, 68, 0.25) 100%);
+      color: #fee2e2;
+    }
+    
+    &[data-entity="venues"] {
+      background: linear-gradient(135deg, rgba(34, 211, 238, 0.2) 0%, rgba(6, 182, 212, 0.25) 100%);
+      color: #cffafe;
+    }
+    
+    &[data-entity="volunteers"] {
+      background: linear-gradient(135deg, rgba(244, 114, 182, 0.2) 0%, rgba(236, 72, 153, 0.25) 100%);
+      color: #fce7f3;
+    }
+    
+    &[data-entity="budgets"] {
+      background: linear-gradient(135deg, rgba(163, 230, 53, 0.2) 0%, rgba(132, 204, 22, 0.25) 100%);
+      color: #ecfccb;
+    }
+    
+    &[data-entity="departments"] {
+      background: linear-gradient(135deg, rgba(251, 146, 60, 0.2) 0%, rgba(249, 115, 22, 0.25) 100%);
+      color: #fed7aa;
+    }
+    
+    &[data-entity="results"] {
+      background: linear-gradient(135deg, rgba(129, 140, 248, 0.2) 0%, rgba(99, 102, 241, 0.25) 100%);
+      color: #e0e7ff;
+    }
+    
+    &[data-entity="judges"] {
+      background: linear-gradient(135deg, rgba(45, 212, 191, 0.2) 0%, rgba(20, 184, 166, 0.25) 100%);
+      color: #ccfbf1;
+    }
+    
+    &[data-entity="feedback"] {
+      background: linear-gradient(135deg, rgba(251, 113, 133, 0.2) 0%, rgba(244, 63, 94, 0.25) 100%);
+      color: #fecdd3;
+    }
+  }
+
+  .count-number {
+    color: #f8fafc;
+    font-weight: 700;
+  }
+
+  .count-label {
+    color: #f1f5f9;
+    font-weight: 600;
+  }
+
+  .count-description {
+    color: #e2e8f0;
+  }
+
+  // Dark mode icon backgrounds - LIGHTER & MORE VISIBLE
+  .count-card[data-entity="events"] .count-icon {
+    background: rgba(96, 165, 250, 0.35);
+    svg { color: #93c5fd !important; }
+  }
+  
+  .count-card[data-entity="clubs"] .count-icon {
+    background: rgba(168, 85, 247, 0.35);
+    svg { color: #c4b5fd !important; }
+  }
+  
+  .count-card[data-entity="participants"] .count-icon {
+    background: rgba(52, 211, 153, 0.35);
+    svg { color: #6ee7b7 !important; }
+  }
+  
+  .count-card[data-entity="registrations"] .count-icon {
+    background: rgba(251, 191, 36, 0.35);
+    svg { color: #fcd34d !important; }
+  }
+  
+  .count-card[data-entity="sponsors"] .count-icon {
+    background: rgba(248, 113, 113, 0.35);
+    svg { color: #fca5a5 !important; }
+  }
+  
+  .count-card[data-entity="venues"] .count-icon {
+    background: rgba(34, 211, 238, 0.35);
+    svg { color: #67e8f9 !important; }
+  }
+  
+  .count-card[data-entity="volunteers"] .count-icon {
+    background: rgba(244, 114, 182, 0.35);
+    svg { color: #f9a8d4 !important; }
+  }
+  
+  .count-card[data-entity="budgets"] .count-icon {
+    background: rgba(163, 230, 53, 0.35);
+    svg { color: #bef264 !important; }
+  }
+  
+  .count-card[data-entity="departments"] .count-icon {
+    background: rgba(251, 146, 60, 0.35);
+    svg { color: #fdba74 !important; }
+  }
+  
+  .count-card[data-entity="results"] .count-icon {
+    background: rgba(129, 140, 248, 0.35);
+    svg { color: #a5b4fc !important; }
+  }
+  
+  .count-card[data-entity="judges"] .count-icon {
+    background: rgba(45, 212, 191, 0.35);
+    svg { color: #5eead4 !important; }
+  }
+  
+  .count-card[data-entity="feedback"] .count-icon {
+    background: rgba(251, 113, 133, 0.35);
+    svg { color: #fda4af !important; }
+  }
+}
+
+// Removed count-change styles - no trend indicators needed
+
+
+
+// Animations
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stat-card {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.activity-item {
+  animation: fadeInUp 0.4s ease-out;
+}
+
+// Responsive Excellence
+@media (max-width: 1024px) {
+  .admin-dashboard {
+    padding: 24px 20px;
+    margin-left: 0;
+  }
+
+  .dashboard-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    margin-bottom: 24px;
+
+    .header-content .dashboard-title {
+      font-size: 28px;
+    }
+
+    .refresh-btn {
+      align-self: flex-start;
+    }
+  }
+
+  .welcome-banner {
+    padding: 32px 24px;
+    margin-bottom: 24px;
+    
+    .welcome-content .welcome-title {
+      font-size: 28px;
+    }
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-dashboard {
+    padding: 20px 16px;
+  }
+
+  .dashboard-header {
+    margin-bottom: 20px;
+    
+    .header-content .dashboard-title {
+      font-size: 24px;
+    }
+  }
+
+  .welcome-banner {
+    padding: 24px 20px;
+    
+    .welcome-content {
+      .welcome-title {
+        font-size: 24px;
+      }
+      
+      .welcome-actions {
+        flex-direction: column;
+        gap: 12px;
+        
+        .action-btn {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+    }
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    
+    .stat-card {
+      padding: 16px 18px;
+      height: 100px;
+      
+      .stat-content {
+        .stat-number {
+          font-size: 24px;
+        }
+        
+        .stat-label {
+          font-size: 12px;
+        }
+        
+        .stat-description {
+          font-size: 10px;
+        }
+      }
+      
+      .stat-icon {
+        width: 40px;
+        height: 40px;
+        
+        svg {
+          width: 18px;
+          height: 18px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-dashboard {
+    padding: 16px 12px;
+  }
+  
+  .welcome-banner {
+    padding: 20px 16px;
+    
+    .welcome-content .welcome-title {
+      font-size: 20px;
+    }
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+    
+    .stat-card {
+      height: 110px;
+    }
+  }
+}
+
+// Dashboard Middle Section Styles
+.dashboard-middle-section {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+.analytics-overview, .recent-activity {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f0f0f0;
+
+  h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 1rem;
+  }
+}
+
+// Dark mode for analytics and activity sections
+:host-context([data-theme="dark"]) {
+  .analytics-overview, .recent-activity {
+    background: var(--bg-secondary, #1f2937);
+    border-color: var(--border, #374151);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+
+    h3 {
+      color: var(--text-primary, #f8fafc);
+    }
+  }
+
+  .chart-header {
+    .chart-title {
+      color: var(--text-primary, #f8fafc);
+    }
+    
+    .chart-subtitle {
+      color: var(--text-secondary, #cbd5e1);
+    }
+  }
+  
+  .line-chart {
+    .month-label,
+    .value-label {
+      fill: var(--text-secondary, #cbd5e1);
+    }
+    
+    .grid-lines line {
+      stroke: var(--text-secondary, #cbd5e1);
+    }
+    
+    .y-axis-labels text {
+      fill: var(--text-secondary, #cbd5e1);
+    }
+  }
+
+  .chart-bars .bar {
+    background: linear-gradient(to top, #667eea, #764ba2);
+  }
+
+  .chart-bars .month-label {
+    color: var(--text-secondary, #cbd5e1);
+  }
+
+  .chart-label {
+    color: var(--text-secondary, #cbd5e1);
+  }
+
+  .activity-icon {
+    background: var(--bg-tertiary, #374151);
+    
+    svg {
+      color: var(--text-secondary, #9ca3af);
+    }
+  }
+
+  .activity-text {
+    color: var(--text-primary, #f8fafc);
+  }
+
+  .activity-time {
+    color: var(--text-secondary, #9ca3af);
+  }
+
+  .no-activities p {
+    color: var(--text-muted, #6b7280);
+  }
+  
+  // Dark mode scrollbar for activity list
+  .activity-list {
+    &::-webkit-scrollbar-track {
+      background: rgba(51, 65, 85, 0.5);
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.3);
+      
+      &:hover {
+        background: rgba(148, 163, 184, 0.5);
+      }
+    }
+  }
+}
+
+.chart-placeholder {
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Modern chart styling
+.chart-card {
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.chart-container {
+  width: 100%;
+  padding: 1.5rem;
+}
+
+.chart-header {
+  margin-bottom: 1.5rem;
+  
+  .chart-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0 0 0.25rem 0;
+  }
+  
+  .chart-subtitle {
+    font-size: 0.875rem;
+    color: #6b7280;
+  }
+}
+
+.line-chart {
+  width: 100%;
+  height: auto;
+  max-height: 300px;
+  
+  .chart-point {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      r: 7;
+      filter: drop-shadow(0 2px 4px rgba(102, 126, 234, 0.4));
+    }
+  }
+  
+  .month-label {
+    opacity: 0.7;
+    font-weight: 500;
+    fill: #374151; // Dark color for light mode visibility
+  }
+  
+  .value-label {
+    opacity: 0.9;
+    fill: #1f2937; // Dark color for light mode visibility
+  }
+  
+  path {
+    transition: all 0.3s ease;
+  }
+}
+
+// Old chart styles (keeping for backwards compatibility)
+.chart-mock {
+  text-align: center;
+  width: 100%;
+}
+
+.chart-bars {
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 120px;
+  margin-bottom: 0.5rem;
+
+  .bar-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .bar {
+    width: 20px;
+    background: linear-gradient(to top, #667eea, #764ba2);
+    border-radius: 2px;
+    min-height: 20px;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      opacity: 0.8;
+      transform: translateY(-2px);
+    }
+  }
+
+  .month-label {
+    font-size: 0.75rem;
+    color: #6b7280;
+    font-weight: 500;
+  }
+}
+
+.chart-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.activity-list {
+  max-height: 350px;
+  overflow-y: auto;
+  
+  // Custom scrollbar for activity list - Light mode
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: var(--bg-tertiary);
+    border-radius: 2px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 2px;
+    
+    &:hover {
+      background: var(--text-muted);
+    }
+  }
+}
+
+.activity-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #f3f4f6;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.activity-icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+    color: #6b7280;
+  }
+}
+
+.activity-details {
+  flex: 1;
+}
+
+.activity-text {
+  font-size: 0.875rem;
+  color: #1a1a1a;
+  margin: 0 0 0.25rem;
+  line-height: 1.4;
+}
+
+.activity-time {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.no-activities {
+  text-align: center;
+  padding: 2rem;
+  color: #9ca3af;
+
+  p {
+    margin: 0;
+  }
+}

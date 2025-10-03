@@ -1,0 +1,203 @@
+<div class="feedback-container">
+  <!-- Back Button - Left aligned with form -->
+  <div class="feedback-header">
+    <button class="back-btn" (click)="goBack()">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M19 12H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Back
+    </button>
+    
+    <!-- Title and Subtitle - Center aligned -->
+    <div class="header-text">
+      <h1>Event Feedback</h1>
+      <p>Help us improve by sharing your experience</p>
+    </div>
+  </div>
+
+  <!-- Feedback Form -->
+  <div class="feedback-form-container">
+    <form [formGroup]="feedbackForm" (ngSubmit)="onSubmit()" class="feedback-form">
+      
+      <!-- Personal Information Section -->
+      <div class="form-section">
+        <h2>Personal Information</h2>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Full Name *</label>
+            <input
+              id="name"
+              type="text"
+              formControlName="name"
+              placeholder="Enter your full name"
+              [class.error]="isFieldInvalid('name')"
+            />
+            <div class="error-message" *ngIf="isFieldInvalid('name')">
+              {{ getFieldError('name') }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email Address *</label>
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              placeholder="Enter your email address"
+              [class.error]="isFieldInvalid('email')"
+            />
+            <div class="error-message" *ngIf="isFieldInvalid('email')">
+              {{ getFieldError('email') }}
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="contactNo">Contact Number *</label>
+          <input
+            id="contactNo"
+            type="tel"
+            formControlName="contactNo"
+            placeholder="Enter your 10-digit contact number"
+            [class.error]="isFieldInvalid('contactNo')"
+          />
+          <div class="error-message" *ngIf="isFieldInvalid('contactNo')">
+            {{ getFieldError('contactNo') }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Rating Section -->
+      <div class="form-section">
+        <h2>Event Ratings</h2>
+        <p class="rating-description">Please rate the following aspects of the event (1 = Poor, 5 = Excellent)</p>
+        
+        <!-- Overall Event Rating -->
+        <div class="rating-group">
+          <label>Overall Event Experience *</label>
+          <div class="star-rating">
+            <button
+              type="button"
+              class="star"
+              *ngFor="let star of [1, 2, 3, 4, 5]"
+              [class.active]="star <= feedbackForm.get('overallEventRating')?.value"
+              (click)="onRatingChange('overallEventRating', star)"
+            >
+              ★
+            </button>
+          </div>
+          <span class="rating-text">{{ feedbackForm.get('overallEventRating')?.value || 0 }} / 5</span>
+        </div>
+
+        <!-- Organization & Management Rating -->
+        <div class="rating-group">
+          <label>Organization & Management *</label>
+          <div class="star-rating">
+            <button
+              type="button"
+              class="star"
+              *ngFor="let star of [1, 2, 3, 4, 5]"
+              [class.active]="star <= feedbackForm.get('orgManagement')?.value"
+              (click)="onRatingChange('orgManagement', star)"
+            >
+              ★
+            </button>
+          </div>
+          <span class="rating-text">{{ feedbackForm.get('orgManagement')?.value || 0 }} / 5</span>
+        </div>
+
+        <!-- Venue & Facilities Rating -->
+        <div class="rating-group">
+          <label>Venue & Facilities *</label>
+          <div class="star-rating">
+            <button
+              type="button"
+              class="star"
+              *ngFor="let star of [1, 2, 3, 4, 5]"
+              [class.active]="star <= feedbackForm.get('venueFacilities')?.value"
+              (click)="onRatingChange('venueFacilities', star)"
+            >
+              ★
+            </button>
+          </div>
+          <span class="rating-text">{{ feedbackForm.get('venueFacilities')?.value || 0 }} / 5</span>
+        </div>
+
+        <!-- Technical Content Rating -->
+        <div class="rating-group">
+          <label>Technical Content *</label>
+          <div class="star-rating">
+            <button
+              type="button"
+              class="star"
+              *ngFor="let star of [1, 2, 3, 4, 5]"
+              [class.active]="star <= feedbackForm.get('techContent')?.value"
+              (click)="onRatingChange('techContent', star)"
+            >
+              ★
+            </button>
+          </div>
+          <span class="rating-text">{{ feedbackForm.get('techContent')?.value || 0 }} / 5</span>
+        </div>
+      </div>
+
+      <!-- Comments Section -->
+      <div class="form-section">
+        <h2>Additional Comments</h2>
+        <div class="form-group">
+          <label for="comments">Your Feedback *</label>
+          <textarea
+            id="comments"
+            formControlName="comments"
+            placeholder="Please share your detailed feedback, suggestions, or any specific comments about the event..."
+            rows="4"
+            [class.error]="isFieldInvalid('comments')"
+          ></textarea>
+          <div class="error-message" *ngIf="isFieldInvalid('comments')">
+            {{ getFieldError('comments') }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="form-actions">
+        <button 
+          type="submit" 
+          class="submit-btn"
+        >
+          Submit Feedback
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Thank You Overlay -->
+<div class="thank-you-overlay" *ngIf="showThankYouOverlay" (click)="closeThankYouOverlay()">
+  <div class="thank-you-modal" (click)="$event.stopPropagation()">
+    <div class="thank-you-header">
+      <div class="success-icon">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="10" fill="#10B981"/>
+          <path d="m9 12 2 2 4-4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h2>Thank You!</h2>
+      <p>Your feedback has been submitted successfully</p>
+    </div>
+    
+    <div class="thank-you-content">
+      <div class="success-message">
+        <p>We really appreciate you taking the time to share your thoughts with us. Your feedback helps us improve our events and provide better experiences for everyone.</p>
+      </div>
+    </div>
+    
+    <div class="thank-you-actions">
+      <button class="primary-btn" (click)="closeThankYouOverlay()">
+        Back to Home
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,350 @@
+<div class="admin-admins-module">
+  <!-- Module Header -->
+  <div class="module-header">
+    <h1>Admins Module</h1>
+    <p class="module-note">Manage administrator accounts with secure password handling</p>
+  </div>
+
+  <!-- Stats Container -->
+  <div class="stats-container">
+    <div class="stats-content">
+      <div class="stat-item">
+        <div class="stat-label">Total Admins</div>
+        <div class="stat-value">{{ totalAdmins }}</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Active Records</div>
+        <div class="stat-value">{{ activeAdmins }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions Bar -->
+  <div class="actions-bar">
+    <!-- Search -->
+    <div class="search-container">
+      <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <circle cx="11" cy="11" r="8" stroke-width="2"/>
+        <path d="m21 21-4.35-4.35" stroke-width="2"/>
+      </svg>
+      <input 
+        type="text" 
+        class="search-input" 
+        placeholder="Search by name, email, or role..."
+        [(ngModel)]="searchTerm"
+        (input)="filterAdmins()"
+      />
+      <button class="clear-btn" *ngIf="searchTerm" (click)="clearSearch()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <line x1="18" y1="6" x2="6" y2="18" stroke-width="2"/>
+          <line x1="6" y1="6" x2="18" y2="18" stroke-width="2"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Create Button -->
+    <button class="create-btn" (click)="openCreateModal()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <circle cx="12" cy="12" r="10" stroke-width="2"/>
+        <line x1="12" y1="8" x2="12" y2="16" stroke-width="2"/>
+        <line x1="8" y1="12" x2="16" y2="12" stroke-width="2"/>
+      </svg>
+      Create Admin
+    </button>
+  </div>
+
+  <!-- Data Table -->
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Sr. No.</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Created At</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let admin of filteredAdmins; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ admin.name }}</td>
+          <td>{{ admin.email }}</td>
+          <td>
+            <span class="role-badge">{{ admin.role }}</span>
+          </td>
+          <td>{{ admin.createdAt ? (admin.createdAt | date:'short') : 'N/A' }}</td>
+          <td class="actions-cell">
+            <button class="edit-btn" (click)="openEditModal(admin)" title="Edit Admin">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke-width="2"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke-width="2"/>
+              </svg>
+            </button>
+            <button 
+              class="delete-btn" 
+              (click)="openDeleteModal(admin.adminId!)" 
+              [disabled]="isCurrentAdmin(admin.adminId!)"
+              [title]="isCurrentAdmin(admin.adminId!) ? 'Cannot delete yourself' : 'Delete Admin'">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <polyline points="3 6 5 6 21 6" stroke-width="2"/>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke-width="2"/>
+                <line x1="10" y1="11" x2="10" y2="17" stroke-width="2"/>
+                <line x1="14" y1="11" x2="14" y2="17" stroke-width="2"/>
+              </svg>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredAdmins.length === 0">
+          <td colspan="6" class="no-data">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <circle cx="12" cy="12" r="10" stroke-width="2"/>
+              <line x1="12" y1="8" x2="12" y2="12" stroke-width="2"/>
+              <line x1="12" y1="16" x2="12.01" y2="16" stroke-width="2"/>
+            </svg>
+            <p>{{ searchTerm ? 'No admins found matching your search' : 'No admins available' }}</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Create Modal -->
+  <div class="modal-overlay" *ngIf="showCreateModal" (click)="closeCreateModal()">
+    <div class="modal-container" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Create New Admin</h2>
+        <button class="close-btn" (click)="closeCreateModal()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <line x1="18" y1="6" x2="6" y2="18" stroke-width="2"/>
+            <line x1="6" y1="6" x2="18" y2="18" stroke-width="2"/>
+          </svg>
+        </button>
+      </div>
+
+      <form [formGroup]="adminForm" (ngSubmit)="onSubmit()" class="modal-form">
+        <div class="form-grid">
+          <!-- Name -->
+          <div class="form-group full-width">
+            <label for="name">Name *</label>
+            <input 
+              type="text" 
+              id="name" 
+              formControlName="name"
+              placeholder="Enter admin name"
+            />
+            <span class="error-text" *ngIf="adminForm.get('name')?.invalid && adminForm.get('name')?.touched">
+              Name is required (min 3 characters)
+            </span>
+          </div>
+
+          <!-- Email -->
+          <div class="form-group full-width">
+            <label for="email">Email *</label>
+            <input 
+              type="email" 
+              id="email" 
+              formControlName="email"
+              placeholder="Enter email address"
+            />
+            <span class="error-text" *ngIf="adminForm.get('email')?.invalid && adminForm.get('email')?.touched">
+              Valid email address required
+            </span>
+          </div>
+
+          <!-- Password -->
+          <div class="form-group full-width">
+            <label for="password">Password *</label>
+            <input 
+              type="password" 
+              id="password" 
+              formControlName="password"
+              placeholder="Enter password (min 6 characters)"
+            />
+            <span class="info-text">Password will be securely hashed using bcrypt</span>
+            <span class="error-text" *ngIf="adminForm.get('password')?.invalid && adminForm.get('password')?.touched">
+              Password is required (min 6 characters)
+            </span>
+          </div>
+
+          <!-- Role -->
+          <div class="form-group full-width">
+            <label for="role">Role *</label>
+            <select id="role" formControlName="role">
+              <option value="ADMIN">ADMIN</option>
+              <option value="SUPER_ADMIN">SUPER_ADMIN</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="error-banner" *ngIf="error">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <circle cx="12" cy="12" r="10" stroke-width="2"/>
+            <line x1="12" y1="8" x2="12" y2="12" stroke-width="2"/>
+            <line x1="12" y1="16" x2="12.01" y2="16" stroke-width="2"/>
+          </svg>
+          <span>{{ error }}</span>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" (click)="closeCreateModal()" [disabled]="loading">
+            Cancel
+          </button>
+          <button type="submit" class="btn-submit" [disabled]="loading || adminForm.invalid">
+            <span *ngIf="!loading">Create Admin</span>
+            <span *ngIf="loading">Creating...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div class="modal-overlay" *ngIf="showEditModal" (click)="closeEditModal()">
+    <div class="modal-container" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Edit Admin</h2>
+        <button class="close-btn" (click)="closeEditModal()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <line x1="18" y1="6" x2="6" y2="18" stroke-width="2"/>
+            <line x1="6" y1="6" x2="18" y2="18" stroke-width="2"/>
+          </svg>
+        </button>
+      </div>
+
+      <form [formGroup]="adminForm" (ngSubmit)="onUpdate()" class="modal-form">
+        <div class="form-grid">
+          <!-- Name -->
+          <div class="form-group full-width">
+            <label for="edit-name">Name *</label>
+            <input 
+              type="text" 
+              id="edit-name" 
+              formControlName="name"
+              placeholder="Enter admin name"
+            />
+            <span class="error-text" *ngIf="adminForm.get('name')?.invalid && adminForm.get('name')?.touched">
+              Name is required (min 3 characters)
+            </span>
+          </div>
+
+          <!-- Email -->
+          <div class="form-group full-width">
+            <label for="edit-email">Email *</label>
+            <input 
+              type="email" 
+              id="edit-email" 
+              formControlName="email"
+              placeholder="Enter email address"
+            />
+            <span class="error-text" *ngIf="adminForm.get('email')?.invalid && adminForm.get('email')?.touched">
+              Valid email address required
+            </span>
+          </div>
+
+          <!-- Password -->
+          <div class="form-group full-width">
+            <label for="edit-password">New Password (optional)</label>
+            <input 
+              type="password" 
+              id="edit-password" 
+              formControlName="password"
+              placeholder="Leave blank to keep current password"
+            />
+            <span class="info-text">Leave empty to keep existing password. New password will be bcrypt hashed.</span>
+          </div>
+
+          <!-- Role -->
+          <div class="form-group full-width">
+            <label for="edit-role">Role *</label>
+            <select id="edit-role" formControlName="role">
+              <option value="ADMIN">ADMIN</option>
+              <option value="SUPER_ADMIN">SUPER_ADMIN</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="error-banner" *ngIf="error">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <circle cx="12" cy="12" r="10" stroke-width="2"/>
+            <line x1="12" y1="8" x2="12" y2="12" stroke-width="2"/>
+            <line x1="12" y1="16" x2="12.01" y2="16" stroke-width="2"/>
+          </svg>
+          <span>{{ error }}</span>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" (click)="closeEditModal()" [disabled]="loading">
+            Cancel
+          </button>
+          <button type="submit" class="btn-submit" [disabled]="loading || adminForm.invalid">
+            <span *ngIf="!loading">Update Admin</span>
+            <span *ngIf="loading">Updating...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Modal -->
+  <div class="modal-overlay" *ngIf="showDeleteModal" (click)="closeDeleteModal()">
+    <div class="modal-container delete-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Confirm Deletion</h2>
+        <button class="close-btn" (click)="closeDeleteModal()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <line x1="18" y1="6" x2="6" y2="18" stroke-width="2"/>
+            <line x1="6" y1="6" x2="18" y2="18" stroke-width="2"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="delete-content">
+        <div class="warning-icon">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke-width="2"/>
+            <line x1="12" y1="9" x2="12" y2="13" stroke-width="2"/>
+            <line x1="12" y1="17" x2="12.01" y2="17" stroke-width="2"/>
+          </svg>
+        </div>
+        <p class="delete-message">Are you sure you want to delete this admin?</p>
+        <p class="delete-warning">This action cannot be undone.</p>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" (click)="closeDeleteModal()" [disabled]="loading">
+          Cancel
+        </button>
+        <button type="button" class="btn-delete" (click)="confirmDelete()" [disabled]="loading">
+          <span *ngIf="!loading">Delete Admin</span>
+          <span *ngIf="loading">Deleting...</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" *ngIf="loading && !showCreateModal && !showEditModal && !showDeleteModal">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Success Toast -->
+  <div class="toast success-toast" [class.show]="showSuccessToast">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke-width="2"/>
+      <polyline points="22 4 12 14.01 9 11.01" stroke-width="2"/>
+    </svg>
+    <span>{{ toastMessage }}</span>
+  </div>
+
+  <!-- Error Toast -->
+  <div class="toast error-toast" [class.show]="showErrorToast">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <circle cx="12" cy="12" r="10" stroke-width="2"/>
+      <line x1="12" y1="8" x2="12" y2="12" stroke-width="2"/>
+      <line x1="12" y1="16" x2="12.01" y2="16" stroke-width="2"/>
+    </svg>
+    <span>{{ toastMessage }}</span>
+  </div>
+</div>

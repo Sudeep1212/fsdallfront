@@ -1,0 +1,201 @@
+<!-- Calendar Container -->
+<div class="calendar-container" [class.dark-theme]="isDarkMode">
+  
+  <!-- Loading State -->
+  <div class="loading-overlay" *ngIf="isLoading">
+    <div class="loading-spinner">
+      <div class="spinner-ring"></div>
+      <div class="loading-text">Loading Events...</div>
+    </div>
+  </div>
+  
+  <!-- Error State -->
+  <div class="error-banner" *ngIf="hasError && !isLoading">
+    <div class="error-content">
+      <svg class="error-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+        <line x1="12" y1="8" x2="12" y2="12" stroke="currentColor" stroke-width="2"/>
+        <line x1="12" y1="16" x2="12.01" y2="16" stroke="currentColor" stroke-width="2"/>
+      </svg>
+      <span class="error-message">{{ errorMessage }}</span>
+      <button class="retry-button" (click)="retryLoad()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M1 4v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Retry
+      </button>
+    </div>
+  </div>
+  
+  <!-- Main Calendar Layout -->
+  <div class="calendar-layout" *ngIf="!isLoading">
+    
+    <!-- Left Sidebar -->
+    <div class="calendar-sidebar">
+      
+      <!-- Month Navigation -->
+      <div class="month-navigation">
+        <button class="nav-button" (click)="previousMonth()" [disabled]="isAnimating">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        
+        <div class="current-month">
+          <h2 class="month-title">{{ getCurrentMonthYear() }}</h2>
+        </div>
+        
+        <button class="nav-button" (click)="nextMonth()" [disabled]="isAnimating">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+      
+      <!-- Mini Calendar -->
+      <div class="mini-calendar">
+        <!-- Mini Calendar Header -->
+        <div class="mini-calendar-header">
+          <div class="mini-day-name" *ngFor="let day of ['S', 'M', 'T', 'W', 'T', 'F', 'S']">{{ day }}</div>
+        </div>
+        
+        <!-- Mini Calendar Grid -->
+        <div class="mini-calendar-grid">
+          <div class="mini-calendar-day"
+               *ngFor="let day of miniCalendarDays; trackBy: trackByDate"
+               [class.other-month]="!day.isCurrentMonth"
+               [class.today]="day.isToday"
+               [class.selected]="isSelectedDate(day)"
+               [class.has-events]="day.events.length > 0"
+               (click)="selectDate(day)">
+            <span class="mini-day-number">{{ day.dayNumber }}</span>
+            <!-- Event dots -->
+            <div class="event-dots" *ngIf="day.events.length > 0">
+              <div class="event-dot" 
+                   *ngFor="let event of day.events | slice:0:3"
+                   [style.background-color]="getEventColor(event.event_type || 'default')">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Selected Date Info -->
+      <div class="selected-date-info">
+        <h3 class="selected-date-title">{{ getSelectedDateFormatted() || getCurrentDateFormatted() }}</h3>
+        
+        <!-- Events for Selected Date -->
+        <div class="selected-events" *ngIf="selectedDateEvents.length > 0; else noEventsSelected">
+          <div class="event-item" 
+               *ngFor="let event of selectedDateEvents"
+               [style.border-left-color]="getEventColor(event.event_type || 'default')">
+            <div class="event-time">{{ formatEventTime(event.event_time || '') }}</div>
+            <div class="event-name">{{ event.event_name }}</div>
+            <div class="event-type" [ngClass]="getEventTypeBadge(event.event_type || '')">
+              {{ event.event_type }}
+            </div>
+          </div>
+        </div>
+        
+        <ng-template #noEventsSelected>
+          <div class="no-events">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="no-events-icon">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+              <path d="M8 14s1.5 2 4 2 4-2 4-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <line x1="9" y1="9" x2="9.01" y2="9" stroke="currentColor" stroke-width="2"/>
+              <line x1="15" y1="9" x2="15.01" y2="9" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            <span>No events scheduled</span>
+          </div>
+        </ng-template>
+      </div>
+      
+      <!-- Upcoming Events Section -->
+      <div class="upcoming-section">
+        <h3 class="section-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2v6l4-4-4-4z" fill="currentColor"/>
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" stroke="currentColor" stroke-width="2"/>
+            <polyline points="7,10 12,15 17,10" stroke="currentColor" stroke-width="2" fill="none"/>
+          </svg>
+          Upcoming Events
+        </h3>
+        
+        <div class="upcoming-events" *ngIf="sidebarUpcomingEvents.length > 0; else noUpcomingEvents">
+          <div class="upcoming-event" 
+               *ngFor="let event of sidebarUpcomingEvents"
+               [style.border-left-color]="getEventColor(event.event_type || 'default')"
+               (click)="selectEventDate(event.event_start_date || '')">
+            <div class="upcoming-date">{{ formatEventDate(event.event_start_date || '') }}</div>
+            <div class="upcoming-name">{{ event.event_name }}</div>
+            <div class="upcoming-time">{{ formatEventTime(event.event_time || '') }}</div>
+            <div class="upcoming-type" [ngClass]="getEventTypeBadge(event.event_type || '')">
+              {{ event.event_type }}
+            </div>
+          </div>
+        </div>
+        
+        <ng-template #noUpcomingEvents>
+          <div class="no-upcoming">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" class="no-upcoming-icon">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke="currentColor" stroke-width="2"/>
+              <line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" stroke-width="2"/>
+              <line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" stroke-width="2"/>
+              <line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            <span>No upcoming events</span>
+          </div>
+        </ng-template>
+      </div>
+      
+    </div>
+    
+    <!-- Right Calendar Grid -->
+    <div class="calendar-grid-container">
+      
+      <!-- Unified Calendar Grid with Headers -->
+      <div class="calendar-grid" [class.animating]="isAnimating">
+        
+        <!-- Weekday Headers -->
+        <div class="day-header" *ngFor="let day of dayNames">{{ day }}</div>
+        
+        <div class="calendar-day"
+             *ngFor="let day of calendarDays; trackBy: trackByDate"
+             [class.other-month]="!day.isCurrentMonth"
+             [class.today]="day.isToday"
+             [class.selected]="isSelectedDate(day)"
+             [class.has-events]="day.events.length > 0"
+             [class.past-day]="isPastDate(day.date)"
+             [style.background-color]="day.events.length > 0 ? getDayBackgroundColor(day.events) : ''"
+             [style.border-left-color]="day.events.length > 0 ? getDayBorderColor(day.events) : ''"
+             [style.border-left-width]="day.events.length > 0 ? '4px' : ''"
+             [style.border-left-style]="day.events.length > 0 ? 'solid' : ''"
+             (click)="selectDate(day)">
+          
+          <!-- Day Number -->
+          <div class="day-number">{{ day.dayNumber }}</div>
+          
+          <!-- Events for this day -->
+          <div class="day-events" *ngIf="day.events.length > 0">
+            <div class="day-event" 
+                 *ngFor="let event of day.events | slice:0:3">
+              <span class="event-title">{{ event.event_name }}</span>
+              <span class="event-time">{{ formatEventTime(event.event_time || '') }}</span>
+            </div>
+            
+            <!-- More events indicator -->
+            <div class="more-events" *ngIf="day.events.length > 3">
+              +{{ day.events.length - 3 }} more
+            </div>
+          </div>
+          
+        </div>
+        
+      </div>
+      
+    </div>
+    
+  </div>
+  
+</div>

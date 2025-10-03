@@ -1,0 +1,304 @@
+<div class="support-container">
+  
+  <!-- Section 1: Hero Section with Contact Information -->
+  <section class="support-hero-section">
+    <div class="support-hero-content">
+      <div class="hero-text">
+        <h1 class="support-title">Get <span class="highlight-text">Support</span></h1>
+        <p class="support-subtitle">
+          We're here to help you with any questions or concerns you may have. 
+          Reach out to us anytime and we'll get back to you as soon as possible.
+        </p>
+        
+        <!-- Quick Contact Features -->
+        <div class="contact-features">
+          <div class="feature-item">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 16.42V19.956C21 20.4774 20.5523 20.9252 20.0309 20.9252C8.94244 20.9252 0 11.9827 0 0.894258C0 0.372862 0.447715 -0.0749359 0.969111 -0.0749359H4.50546C5.02686 -0.0749359 5.47457 0.372862 5.47457 0.894258V4.50771C5.47457 4.78906 5.36309 5.05872 5.16446 5.25735L3.54429 6.87751C4.30574 8.61523 5.58449 10.1172 7.20137 11.2027L8.56621 9.83789C8.83129 9.57281 9.20671 9.43027 9.59441 9.43027H12.9074C13.4288 9.43027 13.8765 9.87798 13.8765 10.3994V13.9358C13.8765 14.4572 13.4288 14.9049 12.9074 14.9049H9.59441C9.20671 14.9049 8.83129 15.0474 8.56621 15.3125L7.20137 16.6773C8.88657 17.7628 10.8885 18.3926 13.0265 18.3926V16.42C13.0265 15.8986 13.4742 15.4509 13.9956 15.4509H17.532C18.0534 15.4509 18.5011 15.8986 18.5011 16.42Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="feature-text">
+              <h3>24/7 Support</h3>
+              <p>Round-the-clock assistance for all your needs</p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="2"/>
+                <path d="M22 7L13.03 12.7a1.94 1.94 0 0 1-2.06 0L2 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="feature-text">
+              <h3>Quick Response</h3>
+              <p>Fast and efficient solutions to your queries</p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L13.09 8.26L22 9L13.09 9.74L12 16L10.91 9.74L2 9L10.91 8.26L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="feature-text">
+              <h3>Expert Team</h3>
+              <p>Experienced professionals ready to assist</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Support Image -->
+      <div class="support-hero-image">
+        <img src="assets/images/support1.png" alt="Support Team" class="hero-image">
+        <div class="image-overlay">
+          <div class="overlay-content">
+            <h3>We're Here to Help</h3>
+            <p>Professional support when you need it</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: Contact Information and Location -->
+  <section class="contact-info-section" id="contact-info">
+    <div class="section-content">
+      <div class="section-header">
+        <h2 class="section-title">Contact <span class="highlight-text">Information</span></h2>
+        <p class="section-subtitle">
+          Find us at our location or reach out through any of the channels below
+        </p>
+        <!-- Debug: Check if contactInfo exists -->
+      </div>
+
+      <div class="contact-grid">
+        <!-- Contact Details -->
+        <div class="contact-details">
+          <div class="contact-card">
+            <div class="contact-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 10C21 17 12 23 12 23S3 17 3 10C3 6.13401 6.13401 3 10 3H14C17.866 3 21 6.13401 21 10Z" stroke="currentColor" stroke-width="2"/>
+                <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </div>
+            <div class="contact-info">
+              <h3>Our Location</h3>
+              <p>{{ contactInfo.address }}</p>
+            </div>
+          </div>
+
+          <div class="contact-card">
+            <div class="contact-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="2"/>
+                <path d="M22 7L13.03 12.7a1.94 1.94 0 0 1-2.06 0L2 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="contact-info">
+              <h3>Email Address</h3>
+              <p>{{ contactInfo.email }}</p>
+            </div>
+          </div>
+
+          <div class="contact-card">
+            <div class="contact-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M22 16.92V19.92C22 20.52 21.52 21 20.92 21C9.4 21 0 11.6 0 0.08C0 -0.52 0.48 -1 1.08 -1H4.08C4.68 -1 5.16 -0.52 5.16 0.08V3.08C5.16 3.38 5.04 3.66 4.82 3.88L3.1 5.6C3.84 7.44 5.16 9.04 6.88 10.32L8.6 8.6C8.82 8.38 9.1 8.26 9.4 8.26H12.4C13 8.26 13.48 8.74 13.48 9.34V12.34C13.48 12.94 13 13.42 12.4 13.42H9.4C9.1 13.42 8.82 13.54 8.6 13.76L6.88 15.48C8.6 16.76 10.6 17.52 12.8 17.52V16.92C12.8 16.32 13.28 15.84 13.88 15.84H16.88C17.48 15.84 17.96 16.32 17.96 16.92Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="contact-info">
+              <h3>Phone Number</h3>
+              <p>{{ contactInfo.phone }}</p>
+            </div>
+          </div>
+
+          <div class="contact-card">
+            <div class="contact-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="contact-info">
+              <h3>Support Hours</h3>
+              <p>Monday - Friday: 9:00 AM - 6:00 PM<br>
+                 Saturday: 10:00 AM - 4:00 PM<br>
+                 Sunday: Closed</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Map Container -->
+        <div class="map-container">
+          <div class="map-wrapper">
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3767.8934674887457!2d72.8688845147759!3d19.20756158703065!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7b7df4f683b85%3A0x2a8c3b5c8e1c8c8c!2sThakur%20College%20of%20Engineering%20and%20Technology!5e0!3m2!1sen!2sin!4v1635847890123!5m2!1sen!2sin"
+              width="100%" 
+              height="400" 
+              style="border:0;" 
+              allowfullscreen="" 
+              loading="lazy" 
+              referrerpolicy="no-referrer-when-downgrade"
+              class="location-map">
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: Support Form (Post-Login Feature) -->
+  <section class="support-form-section">
+    <div class="section-content">
+      <div class="form-container">
+        <div class="form-header">
+          <h2 class="section-title">Send us a <span class="highlight-text">Message</span></h2>
+          <p class="section-subtitle">
+            Have a specific question or need assistance? Fill out the form below and we'll get back to you.
+          </p>
+        </div>
+
+        <!-- Support Form (Always Displayed) -->
+        <form class="support-form" (ngSubmit)="onSubmitSupportForm()" #supportFormRef="ngForm">
+          <div class="form-layout">
+            <div class="form-group">
+              <label for="subject">Subject *</label>
+              <input 
+                type="text" 
+                id="subject" 
+                name="subject"
+                [(ngModel)]="supportForm.subject"
+                placeholder="Brief description of your inquiry"
+                #subjectField="ngModel"
+                required>
+              <div class="validation-message" *ngIf="subjectField.invalid && subjectField.touched">
+                This field is required
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="userEmail">Your Email *</label>
+              <input 
+                type="email" 
+                id="userEmail" 
+                name="userEmail"
+                [(ngModel)]="supportForm.userEmail"
+                placeholder="your.email@example.com"
+                #emailField="ngModel"
+                required
+                email>
+              <div class="validation-message" *ngIf="emailField.invalid && emailField.touched">
+                <span *ngIf="emailField.errors?.['required']">This field is required</span>
+                <span *ngIf="emailField.errors?.['email'] && !emailField.errors?.['required']">Please enter a valid email address</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="message">Message *</label>
+              <textarea 
+                id="message" 
+                name="message"
+                [(ngModel)]="supportForm.message"
+                placeholder="Please describe your issue or question in detail..."
+                rows="6"
+                #messageField="ngModel"
+                required></textarea>
+              <div class="validation-message" *ngIf="messageField.invalid && messageField.touched">
+                This field is required
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="submit-btn" [disabled]="!supportFormRef.form.valid">
+                <span>Send Message</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <button type="reset" class="reset-btn" (click)="onResetForm()">
+                <span>Clear Form</span>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Additional Support Images - Full Width -->
+      <div class="support-images-full-width">
+        <div class="support-image-card">
+          <img src="assets/images/support2.png" alt="Customer Support" class="support-img">
+          <div class="image-content">
+            <h3>Customer Support</h3>
+            <p>Dedicated team ready to help</p>
+          </div>
+        </div>
+
+        <div class="support-image-card">
+          <img src="assets/images/support3.png" alt="Technical Assistance" class="support-img">
+          <div class="image-content">
+            <h3>Technical Assistance</h3>
+            <p>Expert guidance for technical issues</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Additional Support Information -->
+  <section class="additional-info-section">
+    <div class="section-content">
+      <div class="section-header">
+        <h2 class="section-title">Additional <span class="highlight-text">Information</span></h2>
+        <p class="section-subtitle">
+          Learn more about our support process and what you can expect when reaching out to us
+        </p>
+      </div>
+      
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+              <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3>Response Time</h3>
+          <p>We typically respond to all inquiries within 24 hours during business days.</p>
+        </div>
+
+        <div class="info-card">
+          <div class="info-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 11L12 14L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M21 12V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3>Issue Tracking</h3>
+          <p>Every support request is tracked and you'll receive updates on the progress.</p>
+        </div>
+
+        <div class="info-card">
+          <div class="info-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+              <path d="M23 21V19C23 18.1645 22.7155 17.3541 22.2094 16.7006C21.7033 16.047 20.9996 15.5866 20.2 15.3934" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M16 3.13C16.8003 3.32318 17.5056 3.78384 18.0121 4.43758C18.5187 5.09132 18.8018 5.90282 18.8018 6.74C18.8018 7.57718 18.5187 8.38868 18.0121 9.04242C17.5056 9.69616 16.8003 10.1568 16 10.35" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3>Expert Support</h3>
+          <p>Our support team consists of experienced professionals familiar with all platform features.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Shared Footer Component -->
+  <app-footer [currentPage]="'support'"></app-footer>
+
+</div>

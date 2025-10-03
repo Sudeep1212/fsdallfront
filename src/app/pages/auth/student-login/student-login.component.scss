@@ -1,0 +1,503 @@
+// Student Login Form Styles
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff; // Light mode - white background like home page
+  padding: 2rem;
+  padding-top: 120px; // Space for navbar (80px) + extra padding
+  
+  // Dark mode background - same as home page dark theme
+  :host-context(.dark) & {
+    background: #0f172a;
+  }
+}
+
+.login-form-wrapper {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 2rem; // Reduced padding
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  width: 100%;
+  max-width: 500px; // Increased width
+  
+  // Dark mode styling
+  :host-context(.dark) & {
+    background: rgba(15, 23, 42, 0.95);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+}
+
+// Brand Header
+.brand-header {
+  text-align: center;
+  margin-bottom: 1.5rem; // Reduced margin
+  
+  .brand-title {
+    font-size: 1.8rem; // Reduced font size
+    font-weight: 700;
+    background: linear-gradient(135deg, #3A72EC 70%, #8b5cf6 100%); // Using our theme gradient
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+    
+    :host-context(.dark) & {
+      background: linear-gradient(135deg, #3A72EC 0%, #8b5cf6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  }
+  
+  .brand-subtitle {
+    color: #6b7280;
+    font-size: 0.9rem; // Reduced font size
+    margin: 0;
+    
+    :host-context(.dark) & {
+      color: #94a3b8;
+    }
+  }
+}
+
+// Tab Navigation
+.tab-navigation {
+  display: flex;
+  background: #f3f4f6;
+  border-radius: 12px;
+  padding: 0.4rem; // Reduced padding
+  margin-bottom: 1.5rem; // Reduced margin
+  
+  :host-context(.dark) & {
+    background: rgba(51, 65, 85, 0.5);
+  }
+  
+  .tab-btn {
+    flex: 1;
+    padding: 0.6rem 0.8rem; // Reduced padding
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    font-size: 0.9rem; // Reduced font size
+    font-weight: 600;
+    color: #6b7280;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    &.active {
+      background: white;
+      color: #3A72EC;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      
+      :host-context(.dark) & {
+        background: #1e293b;
+        color: #3A72EC;
+      }
+    }
+    
+    &:hover:not(.active) {
+      color: #374151;
+      
+      :host-context(.dark) & {
+        color: #d1d5db;
+      }
+    }
+    
+    :host-context(.dark) & {
+      color: #94a3b8;
+    }
+  }
+}
+
+// Form Container
+.form-container {
+  .auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem; // Reduced gap
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem; // Reduced gap
+    
+    .form-label {
+      font-size: 0.8rem; // Reduced font size
+      font-weight: 600;
+      color: #374151;
+      
+      :host-context(.dark) & {
+        color: #e2e8f0;
+      }
+    }
+    
+    .input-wrapper {
+      position: relative;
+      
+      .input-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #9ca3af;
+        z-index: 1;
+        pointer-events: none;
+      }
+      
+      .form-input {
+        width: 100%;
+        padding: 0.7rem 1rem 0.7rem 2.5rem; // Reduced padding
+        border: 2px solid #e5e7eb;
+        border-radius: 12px;
+        font-size: 0.9rem; // Reduced font size
+        transition: all 0.2s ease;
+        background: #ffffff;
+        color: #1f2937;
+        box-sizing: border-box;
+        
+        &::placeholder {
+          color: #9ca3af;
+        }
+        
+        &:focus {
+          outline: none;
+          border-color: #3A72EC;
+          box-shadow: 0 0 0 3px rgba(58, 114, 236, 0.1);
+        }
+        
+        &.error {
+          border-color: #ef4444;
+          box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
+        
+        :host-context(.dark) & {
+          background: #334155;
+          border-color: #475569;
+          color: #f1f5f9;
+          
+          &::placeholder {
+            color: #64748b;
+          }
+          
+          &:focus {
+            border-color: #3A72EC;
+            box-shadow: 0 0 0 3px rgba(58, 114, 236, 0.2);
+          }
+        }
+      }
+    }
+    
+    .error-message {
+      color: #ef4444;
+      font-size: 0.75rem; // Reduced font size
+      font-weight: 500;
+      
+      :host-context(.dark) & {
+        color: #fca5a5;
+      }
+    }
+  }
+  
+  // Form row for side-by-side fields
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    
+    @media (max-width: 640px) {
+      grid-template-columns: 1fr;
+      gap: 1.2rem;
+    }
+  }
+  
+  // Checkbox styling for terms and conditions
+  .checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.8rem; // Reduced font size
+    color: #6b7280;
+    cursor: pointer;
+    line-height: 1.4;
+    
+    :host-context(.dark) & {
+      color: #94a3b8;
+    }
+    
+    input[type="checkbox"] {
+      width: 1rem;
+      height: 1rem;
+      accent-color: #3A72EC;
+      margin-top: 0.1rem;
+    }
+    
+    .link-text {
+      color: #3A72EC;
+      text-decoration: none;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+  
+  .form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      color: #6b7280;
+      cursor: pointer;
+      
+      input[type="checkbox"] {
+        width: 1rem;
+        height: 1rem;
+        accent-color: #3A72EC;
+      }
+    }
+    
+    .forgot-link {
+      color: #3A72EC;
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-decoration: none;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+  
+  .error-alert {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 12px;
+    color: #dc2626;
+    font-size: 0.875rem;
+    
+    svg {
+      flex-shrink: 0;
+    }
+  }
+  
+  .submit-btn {
+    width: 100%;
+    padding: 0.8rem; // Reduced padding
+    background: linear-gradient(135deg, #3A72EC 0%, #8b5cf6 100%); // Theme gradient
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 0.95rem; // Reduced font size
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    &:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 25px rgba(58, 114, 236, 0.3);
+    }
+    
+    &:active:not(:disabled) {
+      transform: translateY(0);
+    }
+    
+    &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .loading-spinner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      
+      .spinner {
+        animation: spin 1s linear infinite;
+      }
+    }
+  }
+  
+  .divider {
+    position: relative;
+    text-align: center;
+    margin: 1rem 0; // Reduced margin
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: #e5e7eb;
+      
+      :host-context(.dark) & {
+        background: #475569;
+      }
+    }
+    
+    span {
+      background: white;
+      padding: 0 1rem;
+      color: #6b7280;
+      font-size: 0.8rem; // Reduced font size
+      
+      :host-context(.dark) & {
+        background: rgba(15, 23, 42, 0.95);
+        color: #94a3b8;
+      }
+    }
+  }
+  
+  .google-btn {
+    width: 100%;
+    padding: 0.8rem; // Reduced padding
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    background: white;
+    color: #374151;
+    font-size: 0.95rem; // Reduced font size
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    
+    &:hover {
+      border-color: #d1d5db;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    :host-context(.dark) & {
+      background: #334155;
+      border-color: #475569;
+      color: #f1f5f9;
+      
+      &:hover {
+        border-color: #64748b;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
+    }
+  }
+  
+  .redirect-message {
+    text-align: center;
+    padding: 2rem;
+    color: #6b7280;
+    
+    p {
+      margin-bottom: 0.5rem;
+      
+      &:last-child {
+        font-weight: 600;
+        color: #3A72EC;
+      }
+    }
+  }
+}
+
+// Back to Landing
+.back-to-landing {
+  margin-top: 2rem;
+  text-align: center;
+  
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: none;
+    color: #6b7280;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    
+    &:hover {
+      color: #3A72EC;
+    }
+  }
+}
+
+// Animations
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .login-container {
+    padding: 1rem;
+  }
+  
+  .login-form-wrapper {
+    padding: 2rem 1.5rem;
+    max-width: 100%;
+  }
+  
+  .brand-header .brand-title {
+    font-size: 2rem;
+  }
+  
+  .form-group .input-wrapper .form-input {
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .submit-btn,
+  .google-btn {
+    padding: 0.875rem;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-form-wrapper {
+    padding: 1.5rem 1rem;
+    border-radius: 16px;
+  }
+  
+  .brand-header {
+    margin-bottom: 1.5rem;
+    
+    .brand-title {
+      font-size: 1.75rem;
+    }
+  }
+  
+  .tab-navigation {
+    margin-bottom: 1.5rem;
+    
+    .tab-btn {
+      padding: 0.625rem 0.75rem;
+      font-size: 0.875rem;
+    }
+  }
+  
+  .form-container .auth-form {
+    gap: 1.25rem;
+  }
+}

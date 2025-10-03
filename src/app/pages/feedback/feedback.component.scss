@@ -1,0 +1,534 @@
+// Feedback Component Styles
+.feedback-container {
+  min-height: 100vh;
+  background: #ffffff !important; // Force white background
+  padding: 2rem 0;
+  padding-top: 120px; // Space for navbar (80px) + extra padding
+  
+  @media (max-width: 768px) {
+    padding: 1rem 0;
+    padding-top: 100px;
+  }
+  
+  // Dark mode background - only when explicitly in dark mode
+  :host-context(.dark) & {
+    background: #0f172a !important;
+  }
+}
+
+// Header Section - Left aligned back button, center aligned text
+.feedback-header {
+  max-width: 900px;
+  margin: 0 auto 2rem auto;
+  padding: 0 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  background: none !important; // Ensure no background
+
+  @media (max-width: 768px) {
+    padding: 0 1rem;
+    gap: 1rem;
+  }
+
+  .back-btn {
+    margin-bottom: -70px;
+    align-self: flex-start; // Left align the button
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(58, 114, 236, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(58, 114, 236, 0.2);
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    color: #3A72EC;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(58, 114, 236, 0.15);
+      border-color: rgba(58, 114, 236, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(58, 114, 236, 0.2);
+    }
+
+    svg {
+      transition: transform 0.3s ease;
+      filter: drop-shadow(0 0 4px rgba(58, 114, 236, 0.3));
+    }
+
+    &:hover svg {
+      transform: translateX(-2px);
+    }
+
+    @media (max-width: 768px) {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.9rem;
+    }
+
+    // Dark mode styling for back button
+    :host-context(.dark) & {
+      background: rgba(74, 130, 252, 0.1);
+      border-color: rgba(74, 130, 252, 0.2);
+      color: #4A82FC;
+
+      &:hover {
+        background: rgba(74, 130, 252, 0.15);
+        border-color: rgba(74, 130, 252, 0.3);
+        box-shadow: 0 8px 32px rgba(74, 130, 252, 0.2);
+      }
+
+      svg {
+        filter: drop-shadow(0 0 4px rgba(74, 130, 252, 0.3));
+      }
+    }
+  }
+
+  .header-text {
+    text-align: center;
+    
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin: 0;
+      background: linear-gradient(135deg, #3A72EC 0%, #5B8CEF 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+
+      @media (max-width: 768px) {
+        font-size: 1.8rem;
+      }
+      
+      :host-context(.dark) & {
+        color: #f1f5f9;
+        background: linear-gradient(135deg, #4A82FC, #6B5CF6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+    }
+
+    p {
+      font-size: 1rem;
+      color: #64748b;
+      margin: 0.5rem 0 0 0;
+
+      @media (max-width: 768px) {
+        font-size: 0.95rem;
+      }
+      
+      :host-context(.dark) & {
+        color: #94a3b8;
+      }
+    }
+  }
+}
+
+// Form Container
+.feedback-form-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 2rem;
+
+  @media (max-width: 768px) {
+    padding: 0 1rem;
+  }
+}
+
+.feedback-form {
+  background: rgba(255, 255, 255, 0.98) !important; // Much whiter background with important
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+
+  @media (max-width: 768px) {
+    padding: 2rem 1.5rem;
+    border-radius: 16px;
+  }
+  
+  // Dark mode styling - only apply when explicitly in dark mode
+  :host-context(.dark) & {
+    background: rgba(15, 23, 42, 0.95) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  }
+}
+
+// Form Sections
+.form-section {
+  margin-bottom: 2rem;
+
+  &:last-of-type {
+    margin-bottom: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #1e293b !important; // Force dark text in light mode
+    margin: 0 0 1.2rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(58, 114, 236, 0.1);
+    
+    :host-context(.dark) & {
+      color: #f1f5f9 !important;
+      border-bottom-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  .rating-description {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+    
+    :host-context(.dark) & {
+      color: #94a3b8;
+    }
+  }
+}
+
+// Form Layout
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+
+  label {
+    display: block;
+    font-weight: 500;
+    color: #374151 !important; // Force darker color in light mode
+    margin-bottom: 0.4rem;
+    font-size: 0.9rem;
+    
+    :host-context(.dark) & {
+      color: #e5e7eb !important;
+    }
+  }
+
+  input, textarea {
+    width: 100%;
+    padding: 0.9rem 1rem;
+    border: 1.5px solid rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.95) !important; // Force white background
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #1f2937 !important; // Force dark text color
+
+    &:focus {
+      outline: none;
+      border-color: #3A72EC;
+      box-shadow: 0 0 0 3px rgba(58, 114, 236, 0.1);
+      background: rgba(255, 255, 255, 0.98) !important;
+    }
+
+    &.error {
+      border-color: #ef4444;
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    }
+
+    &::placeholder {
+      color: #9ca3af !important;
+    }
+    
+    // Only apply dark styles when explicitly in dark mode
+    :host-context(.dark) & {
+      background: rgba(30, 41, 59, 0.8) !important;
+      border-color: rgba(255, 255, 255, 0.1);
+      color: #f1f5f9 !important;
+
+      &::placeholder {
+        color: #64748b !important;
+      }
+
+      &:focus {
+        background: rgba(30, 41, 59, 0.95) !important;
+        border-color: #3A72EC;
+      }
+    }
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 100px;
+    font-family: inherit;
+  }
+}
+
+// Error Messages
+.error-message {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+// Rating Components
+.rating-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+  padding: 1.2rem;
+  background: rgba(58, 114, 236, 0.02) !important; // Very light background
+  border: 1px solid rgba(58, 114, 236, 0.1);
+  border-radius: 12px;
+  
+  :host-context(.dark) & {
+    background: rgba(58, 114, 236, 0.05) !important;
+    border-color: rgba(58, 114, 236, 0.15);
+  }
+
+  label {
+    font-weight: 600;
+    color: #1e293b !important; // Force dark text
+    margin: 0;
+    font-size: 0.9rem;
+    
+    :host-context(.dark) & {
+      color: #f1f5f9 !important;
+    }
+  }
+
+  .star-rating {
+    display: flex;
+    gap: 0.4rem;
+  }
+
+  .star {
+    background: none;
+    border: none;
+    font-size: 1.6rem;
+    color: #d1d5db;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0.2rem;
+    border-radius: 4px;
+
+    &:hover {
+      color: #fbbf24;
+      transform: scale(1.1);
+    }
+
+    &.active {
+      color: #f59e0b;
+    }
+  }
+
+  .rating-text {
+    font-weight: 600;
+    color: #3A72EC;
+    font-size: 0.85rem;
+  }
+}
+
+// Form Actions
+.form-actions {
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.submit-btn {
+  background: linear-gradient(135deg, #3A72EC 0%, #5B8CEF 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 1rem 2.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0 auto;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(58, 114, 236, 0.3);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  &.loading {
+    pointer-events: none;
+  }
+}
+
+// Loading Spinner
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top: 2px solid white;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// Thank You Overlay Styles
+.thank-you-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.3s ease-out;
+  padding: 1rem;
+}
+
+.thank-you-modal {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 24px;
+  padding: 3rem;
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  animation: slideInUp 0.4s ease-out;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+
+  @media (max-width: 768px) {
+    padding: 2rem 1.5rem;
+    border-radius: 16px;
+    max-width: 90%;
+  }
+}
+
+.thank-you-header {
+  margin-bottom: 2rem;
+
+  .success-icon {
+    margin: 0 auto 1.5rem auto;
+    animation: bounceIn 0.6s ease-out 0.2s both;
+  }
+
+  h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 1rem 0;
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+
+    @media (max-width: 768px) {
+      font-size: 1.6rem;
+    }
+  }
+
+  p {
+    color: #64748b;
+    font-size: 1.1rem;
+    margin: 0;
+  }
+}
+
+.thank-you-content {
+  margin-bottom: 2.5rem;
+
+  .success-message p {
+    color: #4b5563;
+    line-height: 1.6;
+    font-size: 1rem;
+  }
+}
+
+.thank-you-actions {
+  .primary-btn {
+    background: linear-gradient(135deg, #3A72EC 0%, #5B8CEF 100%);
+    color: white;
+    border: none;
+    border-radius: 16px;
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(58, 114, 236, 0.3);
+    }
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// Remove conflicting dark mode styles - they should be handled by :host-context(.dark) only

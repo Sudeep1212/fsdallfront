@@ -1,0 +1,260 @@
+<div class="admin-results-module">
+  <!-- Module Header -->
+  <div class="module-header">
+    <h1>Results Module</h1>
+  </div>
+
+  <!-- Stats Container -->
+  <div class="stats-container">
+    <div class="stats-content">
+      <div class="stat-item">
+        <div class="stat-label">Total Results</div>
+        <div class="stat-value">{{ totalResults }}</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Top Rankers</div>
+        <div class="stat-value">{{ activeResults }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions Bar -->
+  <div class="actions-bar">
+    <!-- Search -->
+    <div class="search-container">
+      <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <circle cx="11" cy="11" r="8" stroke-width="2"/>
+        <path d="m21 21-4.35-4.35" stroke-width="2"/>
+      </svg>
+      <input 
+        type="text" 
+        class="search-input" 
+        placeholder="Search by participant name, event, college, rank, or score..."
+        [(ngModel)]="searchTerm"
+        (input)="filterResults()"
+      />
+      <button class="clear-btn" *ngIf="searchTerm" (click)="clearSearch()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <line x1="18" y1="6" x2="6" y2="18" stroke-width="2"/>
+          <line x1="6" y1="6" x2="18" y2="18" stroke-width="2"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Create Button -->
+    <button class="create-btn" (click)="openCreateModal()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <circle cx="12" cy="12" r="10" stroke-width="2"/>
+        <line x1="12" y1="8" x2="12" y2="16" stroke-width="2"/>
+        <line x1="8" y1="12" x2="16" y2="12" stroke-width="2"/>
+      </svg>
+      Create Result
+    </button>
+  </div>
+
+  <!-- Data Table -->
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Sr. No.</th>
+          <th>Rank</th>
+          <th>Score</th>
+          <th>Participant Name</th>
+          <th>College</th>
+          <th>Event</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let result of filteredResults; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td><span class="rank-badge rank-{{ result.rank }}">{{ result.rank }}</span></td>
+          <td>{{ result.score }}</td>
+          <td>{{ result.participantName || 'N/A' }}</td>
+          <td>{{ result.participantCollege || 'N/A' }}</td>
+          <td>{{ result.eventName || 'N/A' }}</td>
+          <td>
+            <button class="delete-btn" (click)="openDeleteModal(result.resultId!)" title="Delete Result">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <polyline points="3 6 5 6 21 6" stroke-width="2"/>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke-width="2"/>
+                <line x1="10" y1="11" x2="10" y2="17" stroke-width="2"/>
+                <line x1="14" y1="11" x2="14" y2="17" stroke-width="2"/>
+              </svg>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredResults.length === 0">
+          <td colspan="7" class="no-data">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <circle cx="12" cy="12" r="10" stroke-width="2"/>
+              <line x1="12" y1="8" x2="12" y2="12" stroke-width="2"/>
+              <line x1="12" y1="16" x2="12.01" y2="16" stroke-width="2"/>
+            </svg>
+            <p>{{ searchTerm ? 'No results found matching your search' : 'No results available' }}</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Create Modal -->
+  <div class="modal-overlay" *ngIf="showCreateModal" (click)="closeCreateModal()">
+    <div class="modal-container" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Create New Result</h2>
+        <button class="close-btn" (click)="closeCreateModal()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <line x1="18" y1="6" x2="6" y2="18" stroke-width="2"/>
+            <line x1="6" y1="6" x2="18" y2="18" stroke-width="2"/>
+          </svg>
+        </button>
+      </div>
+
+      <form [formGroup]="resultForm" (ngSubmit)="onSubmit()" class="modal-form">
+        <div class="form-grid">
+          <!-- Rank -->
+          <div class="form-group">
+            <label for="rank">Rank *</label>
+            <input 
+              type="number" 
+              id="rank" 
+              formControlName="rank"
+              placeholder="Enter rank (e.g., 1, 2, 3)"
+              min="1"
+            />
+            <span class="error-text" *ngIf="resultForm.get('rank')?.invalid && resultForm.get('rank')?.touched">
+              Rank is required and must be a positive number
+            </span>
+          </div>
+
+          <!-- Score -->
+          <div class="form-group">
+            <label for="score">Score *</label>
+            <input 
+              type="number" 
+              id="score" 
+              formControlName="score"
+              placeholder="Enter score"
+              step="0.01"
+              min="0"
+            />
+            <span class="error-text" *ngIf="resultForm.get('score')?.invalid && resultForm.get('score')?.touched">
+              Score is required and must be a positive number
+            </span>
+          </div>
+
+          <!-- Event -->
+          <div class="form-group full-width">
+            <label for="eventId">Event *</label>
+            <select id="eventId" formControlName="eventId">
+              <option value="" disabled selected>Select an event</option>
+              <option *ngFor="let event of events" [value]="event.event_id">
+                {{ event.event_name }}
+              </option>
+            </select>
+            <span class="error-text" *ngIf="resultForm.get('eventId')?.invalid && resultForm.get('eventId')?.touched">
+              Event is required
+            </span>
+          </div>
+
+          <!-- Participation -->
+          <div class="form-group full-width">
+            <label for="participationId">Participant *</label>
+            <select id="participationId" formControlName="participationId">
+              <option value="" disabled selected>Select a participant</option>
+              <option *ngFor="let participation of participations" [value]="participation.participationId">
+                {{ participation.participantName }} - {{ participation.eventName }} ({{ participation.participantCollege }})
+              </option>
+            </select>
+            <span class="error-text" *ngIf="resultForm.get('participationId')?.invalid && resultForm.get('participationId')?.touched">
+              Participant is required
+            </span>
+          </div>
+        </div>
+
+        <!-- Error Banner -->
+        <div class="error-banner" *ngIf="error">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <circle cx="12" cy="12" r="10" stroke-width="2"/>
+            <line x1="12" y1="8" x2="12" y2="12" stroke-width="2"/>
+            <line x1="12" y1="16" x2="12.01" y2="16" stroke-width="2"/>
+          </svg>
+          <span>{{ error }}</span>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" (click)="closeCreateModal()">
+            Cancel
+          </button>
+          <button type="submit" class="btn-submit" [disabled]="resultForm.invalid || loading">
+            <span *ngIf="!loading">Create Result</span>
+            <span *ngIf="loading">Creating...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Modal -->
+  <div class="modal-overlay" *ngIf="showDeleteModal" (click)="closeDeleteModal()">
+    <div class="modal-container delete-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Confirm Deletion</h2>
+        <button class="close-btn" (click)="closeDeleteModal()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <line x1="18" y1="6" x2="6" y2="18" stroke-width="2"/>
+            <line x1="6" y1="6" x2="18" y2="18" stroke-width="2"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="delete-content">
+        <div class="warning-icon">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke-width="2"/>
+            <line x1="12" y1="9" x2="12" y2="13" stroke-width="2"/>
+            <line x1="12" y1="17" x2="12.01" y2="17" stroke-width="2"/>
+          </svg>
+        </div>
+        <p class="delete-message">Are you sure you want to delete this result?</p>
+        <p class="delete-warning">This action cannot be undone.</p>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" (click)="closeDeleteModal()">
+          Cancel
+        </button>
+        <button type="button" class="btn-delete" (click)="confirmDelete()" [disabled]="loading">
+          <span *ngIf="!loading">Delete Result</span>
+          <span *ngIf="loading">Deleting...</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" *ngIf="loading && !showDeleteModal">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Success Toast -->
+  <div class="toast success-toast" [class.show]="showSuccessToast">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke-width="2"/>
+      <polyline points="22 4 12 14.01 9 11.01" stroke-width="2"/>
+    </svg>
+    <span>{{ toastMessage }}</span>
+  </div>
+
+  <!-- Error Toast -->
+  <div class="toast error-toast" [class.show]="showErrorToast">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <circle cx="12" cy="12" r="10" stroke-width="2"/>
+      <line x1="12" y1="8" x2="12" y2="12" stroke-width="2"/>
+      <line x1="12" y1="16" x2="12.01" y2="16" stroke-width="2"/>
+    </svg>
+    <span>{{ toastMessage }}</span>
+  </div>
+</div>

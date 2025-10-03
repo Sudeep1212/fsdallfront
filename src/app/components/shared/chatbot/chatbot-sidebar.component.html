@@ -1,0 +1,101 @@
+<!-- Chatbot Sidebar Overlay -->
+<div class="chatbot-overlay" 
+     [class.active]="isOpen"
+     (click)="closeChatbot()"
+     *ngIf="isOpen">
+</div>
+
+<!-- Chatbot Sidebar -->
+<div class="chatbot-sidebar" 
+     [class.active]="isOpen">
+  
+  <!-- Sidebar Header -->
+  <div class="chatbot-header">
+    <!-- Close Button - TOP LEFT as specified -->
+    <button class="close-button" 
+            (click)="closeChatbot()"
+            title="Close Chat">
+      ✕
+    </button>
+    
+    <!-- Centered Header Content -->
+    <div class="header-content">
+      <h3>FestFlex Assistant</h3>
+    </div>
+  </div>
+
+  <!-- Chat Messages Container -->
+  <div class="chat-messages" #chatMessages>
+    <div class="messages-wrapper">
+
+      <!-- Chat Messages -->
+      <ng-container *ngFor="let message of messages; trackBy: trackByMessageId">
+        <!-- Response Bubble - ALWAYS SHOW for all messages -->
+        <div class="message" 
+             [class.user-message]="message.sender === 'user'"
+             [class.bot-message]="message.sender === 'bot'">
+          
+          <!-- Message Content - ALWAYS VISIBLE -->
+          <div class="message-bubble" [class.streaming]="message.isStreaming">
+            
+            <!-- FOR BOT MESSAGES: Show typing indicator when streaming but no content yet -->
+            <ng-container *ngIf="message.sender === 'bot' && message.isStreaming && !message.content">
+              <div class="typing-indicator">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </ng-container>
+            
+            <!-- FOR ALL MESSAGES: Always show content area (even if empty) -->
+            <div class="message-content" [innerHTML]="formatMessage(message.content || '')"></div>
+                 
+            <!-- Timestamp - only when not streaming and has content -->
+            <div class="message-time" *ngIf="!message.isStreaming && message.content">{{ formatTime(message.timestamp) }}</div>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- Global Typing Indicator (Shows ONLY during initial API call before any response) -->
+      <div class="message bot-message" *ngIf="isLoading && !hasStreamingMessage()">
+        <div class="message-bubble loading">
+          <div class="typing-indicator">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Input Area -->
+  <div class="chat-input-area">
+    <form (ngSubmit)="sendMessage()" class="input-form">
+      <div class="input-container">
+        <input
+          type="text"
+          [value]="currentMessage"
+          (input)="onMessageInput($event)"
+          placeholder="Type your message..."
+          class="message-input"
+          [disabled]="isLoading"
+          #messageInput
+          maxlength="500"
+        />
+        <button
+          type="submit"
+          class="send-button"
+          [disabled]="isSendDisabled"
+          title="Send Message">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="input-footer">
+        <span class="character-count">{{ messageLength }}/500</span>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,100 @@
+<div class="modal-overlay" (click)="onClose()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <h2 class="modal-title">Add Your Comment</h2>
+      <button class="close-button" (click)="onClose()" type="button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Modal Body -->
+    <form [formGroup]="commentForm" (ngSubmit)="onSubmit()" class="comment-form">
+      
+      <!-- User Info Display -->
+      <div class="user-info" *ngIf="currentUser">
+        <div class="user-avatar">
+          {{ getUserInitials() }}
+        </div>
+        <div class="user-details">
+          <span class="user-name">{{ getUserDisplayName() }}</span>
+          <span class="user-email">{{ currentUser.email }}</span>
+        </div>
+      </div>
+
+      <!-- Comment Input -->
+      <div class="input-group">
+        <label for="content" class="input-label">Your Comment</label>
+        <textarea 
+          id="content"
+          formControlName="content"
+          class="comment-textarea"
+          [class.error]="content?.invalid && content?.touched"
+          placeholder="Share your thoughts about our events..."
+          rows="4"
+          maxlength="500">
+        </textarea>
+        
+        <!-- Character Count -->
+        <div class="character-info">
+          <span class="character-count" [class.warning]="characterCount > 450">
+            {{ characterCount }}/{{ maxLength }}
+          </span>
+        </div>
+
+        <!-- Validation Messages -->
+        <div class="error-messages" *ngIf="content?.invalid && content?.touched">
+          <div class="error-message" *ngIf="content?.hasError('required')">
+            Comment is required
+          </div>
+          <div class="error-message" *ngIf="content?.hasError('minlength')">
+            Comment must be at least 10 characters long
+          </div>
+          <div class="error-message" *ngIf="content?.hasError('maxlength')">
+            Comment cannot exceed 500 characters
+          </div>
+        </div>
+
+        <!-- API Error Messages -->
+        <div class="api-error-message" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </div>
+
+        <!-- Success Message -->
+        <div class="success-message" *ngIf="showSuccess">
+          ✅ Comment posted successfully!
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="modal-actions">
+        <button 
+          type="button" 
+          class="cancel-button" 
+          (click)="onClose()"
+          [disabled]="isSubmitting">
+          Cancel
+        </button>
+        
+        <button 
+          type="submit" 
+          class="submit-button"
+          [disabled]="commentForm.invalid || isSubmitting"
+          [class.loading]="isSubmitting">
+          <span *ngIf="!isSubmitting">Post Comment</span>
+          <span *ngIf="isSubmitting" class="loading-text">
+            <svg class="spinner" width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" opacity="0.25"/>
+              <path d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" fill="currentColor"/>
+            </svg>
+            Posting...
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

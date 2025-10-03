@@ -1,0 +1,103 @@
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-main">
+      <!-- Company Section -->
+      <div class="footer-section">
+        <div class="footer-brand">
+          <div class="brand-logo">
+            <img src="assets/images/navbar-logo.png" alt="FestFlex Logo" class="logo-image">
+          </div>
+          <p class="brand-description">
+            Empowering organizations to create exceptional events with our comprehensive management platform.
+          </p>
+          <div class="social-links">
+            <a 
+              *ngFor="let social of socialLinks" 
+              [href]="social.url" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="social-link"
+              [attr.aria-label]="social.name"
+            >
+              <i class="social-icon" [class]="'icon-' + social.icon"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="footer-section">
+        <h3 class="section-title">Quick Links</h3>
+        <ul class="footer-links">
+          <li *ngFor="let link of quickLinks">
+            <a 
+              [routerLink]="link.route"
+              class="footer-link"
+            >
+              {{ link.name }}
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Services Links -->
+      <div class="footer-section">
+        <h3 class="section-title">Services</h3>
+        <ul class="footer-links">
+          <li *ngFor="let link of servicesLinks">
+            <a 
+              [routerLink]="link.route"
+              class="footer-link"
+            >
+              {{ link.name }}
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Support Links -->
+      <div class="footer-section">
+        <h3 class="section-title">Support</h3>
+        <ul class="footer-links">
+          <li *ngFor="let link of supportLinks">
+            <a 
+              [routerLink]="link.route"
+              class="footer-link"
+            >
+              {{ link.name }}
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Legal Links -->
+      <div class="footer-section">
+        <h3 class="section-title">Legal</h3>
+        <ul class="footer-links">
+          <li *ngFor="let link of legalLinks">
+            <a 
+              [routerLink]="link.route"
+              class="footer-link"
+            >
+              {{ link.name }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Footer Bottom -->
+    <div class="footer-bottom">
+      <div class="footer-bottom-content">
+        <p class="copyright">
+          © {{ currentYear }} EventsPro. All rights reserved.
+        </p>
+        <div class="footer-bottom-links">
+          <a routerLink="/legal/terms" class="bottom-link">Terms</a>
+          <a routerLink="/legal/privacy" class="bottom-link">Privacy</a>
+          <a routerLink="/legal/cookies" class="bottom-link">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

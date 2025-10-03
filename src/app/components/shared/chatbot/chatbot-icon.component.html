@@ -1,0 +1,15 @@
+<div class="chatbot-icon-container" 
+     [class.active]="isOpen"
+     (click)="toggleChatbot()"
+     title="Chat with FestFlex Assistant">
+  
+  <!-- Simple Chatbot Icon -->
+  <div class="chatbot-icon">
+    <img src="assets/images/chatbot-icon.png" 
+         alt="FestFlex Chatbot" 
+         class="chatbot-image">
+  </div>
+  
+  <!-- Notification Dot (if needed) -->
+  <div class="notification-dot" *ngIf="hasNewMessage"></div>
+</div>
