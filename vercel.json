@@ -3,13 +3,11 @@
   "builds": [
     {
       "src": "package.json",
-      "use": "@vercel/angular",
+      "use": "@vercel/static-build",
       "config": {
-        "server": "dist/events-management-app/server/main.js",
-        "prerender": {
-          "expiration": 60,
-          "group": 1
-        }
+        "distDir": "dist/events-management-app/browser",
+        "installCommand": "npm install",
+        "buildCommand": "npm run build"
       }
     }
   ],
@@ -24,7 +22,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "/"
+      "dest": "/index.html"
     }
   ],
   "env": {
