@@ -56,6 +56,13 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "typescript": "~5.9.2"
+    "typescript": "5.9.3"
+  },
+  "engines": {
+    "node": "20.x",
+    "npm": "9.x"
+  },
+  "installConfig": {
+    "legacy-peer-deps": true
   }
 }
