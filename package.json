@@ -8,6 +8,7 @@
     "build:vercel": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "postinstall": "ngcc",
     "serve:ssr:events-management-app": "node dist/events-management-app/server/server.mjs"
   },
   "prettier": {
