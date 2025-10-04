@@ -24,6 +24,33 @@ const angularApp = new AngularNodeAppEngine();
  * ```
  */
 
+function getPrerenderParams(route: string): Record<string, string>[] {
+  if (route === 'event-registration/:id') {
+    // Return an array of params for the dynamic route
+    // You may want to fetch actual event IDs from your API here
+    return [
+      { id: '1' },
+      // Add more event IDs as needed
+    ];
+  }
+  return [];
+}
+
+export function setupPrerenderRoutes(expressApp: express.Express) {
+  const routes = ['event-registration/:id'];
+  
+  routes.forEach(route => {
+    expressApp.get(`/${route}`, (req, res, next) => {
+      angularApp
+        .handle(req)
+        .then((response) =>
+          response ? writeResponseToNodeResponse(response, res) : next(),
+        )
+        .catch(next);
+    });
+  });
+}
+
 /**
  * Serve static files from /browser
  */
@@ -34,6 +61,9 @@ app.use(
     redirect: false,
   }),
 );
+
+// Setup prerender routes
+setupPrerenderRoutes(app);
 
 /**
  * Handle all other requests by rendering the Angular application.

@@ -5,7 +5,11 @@
       "src": "package.json",
       "use": "@vercel/angular",
       "config": {
-        "server": "dist/events-management-app/server/main.js"
+        "server": "dist/events-management-app/server/main.js",
+        "prerender": {
+          "expiration": 60,
+          "group": 1
+        }
       }
     }
   ],
@@ -13,6 +17,10 @@
     {
       "src": "/assets/(.*)",
       "dest": "/assets/$1"
+    },
+    {
+      "src": "/event-registration/(?<id>[^/]+)$",
+      "dest": "/event-registration/[id]"
     },
     {
       "src": "/(.*)",
