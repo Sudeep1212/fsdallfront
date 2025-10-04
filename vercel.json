@@ -3,20 +3,10 @@
   "builds": [
     {
       "src": "package.json",
-      "use": "@vercel/angular",
+      "use": "@vercel/static-build",
       "config": {
-        "server": "dist/events-management-app/server/main.js",
-        "browser": "dist/events-management-app/browser",
-        "prerender": {
-          "routes": [
-            "/",
-            "/about",
-            "/gallery",
-            "/support",
-            "/feedback",
-            "/results"
-          ]
-        }
+        "buildCommand": "npm run build:ssr",
+        "outputDirectory": "dist/events-management-app"
       }
     }
   ],
