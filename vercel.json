@@ -1,17 +1,22 @@
 {
+  "version": 2,
   "builds": [
     {
       "src": "package.json",
-      "use": "@vercel/static-build",
+      "use": "@vercel/angular",
       "config": {
-        "distDir": "dist/events-management-app/browser"
+        "server": "dist/events-management-app/server/main.js"
       }
     }
   ],
   "routes": [
     {
+      "src": "/assets/(.*)",
+      "dest": "/assets/$1"
+    },
+    {
       "src": "/(.*)",
-      "dest": "/index.html"
+      "dest": "/"
     }
   ],
   "functions": {
