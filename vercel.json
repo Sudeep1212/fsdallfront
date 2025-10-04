@@ -3,11 +3,20 @@
   "builds": [
     {
       "src": "package.json",
-      "use": "@vercel/static-build",
+      "use": "@vercel/angular",
       "config": {
-        "distDir": "dist/events-management-app/browser",
-        "installCommand": "npm install",
-        "buildCommand": "npm run build"
+        "server": "dist/events-management-app/server/main.js",
+        "browser": "dist/events-management-app/browser",
+        "prerender": {
+          "routes": [
+            "/",
+            "/about",
+            "/gallery",
+            "/support",
+            "/feedback",
+            "/results"
+          ]
+        }
       }
     }
   ],
@@ -19,7 +28,7 @@
     },
     {
       "src": "/event-registration/(?<id>[^/]+)",
-      "dest": "/index.html"
+      "dest": "/event-registration/[id]"
     },
     {
       "src": "/(.*)",
@@ -28,10 +37,5 @@
   ],
   "env": {
     "NG_APP_API_URL": "https://fsdallback.onrender.com"
-  },
-  "build": {
-    "env": {
-      "NODE_ENV": "production"
-    }
   }
 }

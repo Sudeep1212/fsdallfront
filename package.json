@@ -5,11 +5,12 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build --configuration production",
-    "build:vercel": "ng build --configuration production",
+    "build:static": "ng build --configuration production",
+    "build:ssr": "ng build --configuration production && ng run events-management-app:server:production",
+    "serve:ssr": "node dist/events-management-app/server/main.js",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "postinstall": "ngcc",
-    "serve:ssr:events-management-app": "node dist/events-management-app/server/server.mjs"
+    "postinstall": "ngcc"
   },
   "prettier": {
     "printWidth": 100,

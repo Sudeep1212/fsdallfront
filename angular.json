@@ -19,38 +19,28 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular/build:application",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "browser": "src/main.ts",
+            "outputPath": "dist/events-management-app/browser",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
               { "glob": "**/*", "input": "public" },
               { "glob": "**/*", "input": "src/assets", "output": "assets" }
             ],
-            "styles": ["src/styles.scss"],
-            "outputPath": "dist/events-management-app/browser",
-            "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": ["zone.js"]
+            "styles": ["src/styles.scss"]
           },
           "configurations": {
             "production": {
               "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2MB",
-                  "maximumError": "3MB"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "4.5MB",
-                  "maximumError": "6MB"
-                }
+                { "type": "initial", "maximumWarning": "2MB", "maximumError": "3MB" },
+                { "type": "anyComponentStyle", "maximumWarning": "50kB", "maximumError": "100kB" }
               ],
-              "outputHashing": "all",
               "optimization": true,
-              "extractLicenses": true,
+              "outputHashing": "all",
               "sourceMap": false,
               "namedChunks": false,
               "aot": true,
@@ -71,15 +61,28 @@
           },
           "defaultConfiguration": "production"
         },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/events-management-app/server",
+            "main": "src/main.server.ts",
+            "tsConfig": "tsconfig.server.json"
+          },
+          "configurations": {
+            "production": {
+              "sourceMap": false
+            },
+            "development": {
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
-            "production": {
-              "browserTarget": "events-management-app:build:production"
-            },
-            "development": {
-              "browserTarget": "events-management-app:build:development"
-            }
+            "production": { "browserTarget": "events-management-app:build:production" },
+            "development": { "browserTarget": "events-management-app:build:development" }
           },
           "defaultConfiguration": "development"
         }
