@@ -14,11 +14,6 @@
       "dest": "/index.html"
     }
   ],
-  "functions": {
-    "src/app/**/*.ts": {
-      "runtime": "nodejs18.x"
-    }
-  },
   "env": {
     "NG_APP_API_URL": "https://fsdallback.onrender.com"
   }
