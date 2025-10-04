@@ -1,6 +1,12 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormsModule,
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 
@@ -45,7 +51,7 @@ interface Event {
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './admin-volunteers.component.html',
-  styleUrl: './admin-volunteers.component.scss'
+  styleUrl: './admin-volunteers.component.scss',
 })
 export class AdminVolunteersComponent implements OnInit {
   volunteers: Volunteer[] = [];
@@ -65,13 +71,9 @@ export class AdminVolunteersComponent implements OnInit {
   showErrorToast: boolean = false;
 
   volunteerForm: FormGroup;
-  private apiUrl = 'http://localhost:8080/api';
+  private apiUrl = 'https://fsdallback.onrender.com/api';
 
-  constructor(
-    private http: HttpClient,
-    private fb: FormBuilder,
-    private cdr: ChangeDetectorRef
-  ) {
+  constructor(private http: HttpClient, private fb: FormBuilder, private cdr: ChangeDetectorRef) {
     this.volunteerForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
       role: ['', [Validators.required, Validators.minLength(3)]],
@@ -80,7 +82,7 @@ export class AdminVolunteersComponent implements OnInit {
       club_id: [null],
       department_id: [null],
       venue_id: [null],
-      event_id: [null]
+      event_id: [null],
     });
   }
 
@@ -106,9 +108,7 @@ export class AdminVolunteersComponent implements OnInit {
 
   async loadClubs() {
     try {
-      this.clubs = await firstValueFrom(
-        this.http.get<Club[]>(`${this.apiUrl}/clubs`)
-      );
+      this.clubs = await firstValueFrom(this.http.get<Club[]>(`${this.apiUrl}/clubs`));
     } catch (error: any) {
       console.error('Error loading clubs:', error);
     }
@@ -126,9 +126,7 @@ export class AdminVolunteersComponent implements OnInit {
 
   async loadVenues() {
     try {
-      this.venues = await firstValueFrom(
-        this.http.get<Venue[]>(`${this.apiUrl}/venues`)
-      );
+      this.venues = await firstValueFrom(this.http.get<Venue[]>(`${this.apiUrl}/venues`));
     } catch (error: any) {
       console.error('Error loading venues:', error);
     }
@@ -136,9 +134,7 @@ export class AdminVolunteersComponent implements OnInit {
 
   async loadEvents() {
     try {
-      this.events = await firstValueFrom(
-        this.http.get<Event[]>(`${this.apiUrl}/events`)
-      );
+      this.events = await firstValueFrom(this.http.get<Event[]>(`${this.apiUrl}/events`));
     } catch (error: any) {
       console.error('Error loading events:', error);
     }
@@ -151,13 +147,14 @@ export class AdminVolunteersComponent implements OnInit {
       return;
     }
 
-    this.filteredVolunteers = this.volunteers.filter(volunteer =>
-      volunteer.name?.toLowerCase().includes(term) ||
-      volunteer.role?.toLowerCase().includes(term) ||
-      volunteer.clubName?.toLowerCase().includes(term) ||
-      volunteer.departmentName?.toLowerCase().includes(term) ||
-      volunteer.venueName?.toLowerCase().includes(term) ||
-      volunteer.eventName?.toLowerCase().includes(term)
+    this.filteredVolunteers = this.volunteers.filter(
+      (volunteer) =>
+        volunteer.name?.toLowerCase().includes(term) ||
+        volunteer.role?.toLowerCase().includes(term) ||
+        volunteer.clubName?.toLowerCase().includes(term) ||
+        volunteer.departmentName?.toLowerCase().includes(term) ||
+        volunteer.venueName?.toLowerCase().includes(term) ||
+        volunteer.eventName?.toLowerCase().includes(term)
     );
   }
 
@@ -168,7 +165,7 @@ export class AdminVolunteersComponent implements OnInit {
 
   openCreateModal() {
     this.volunteerForm.reset({
-      isAssigned: false
+      isAssigned: false,
     });
     this.showCreateModal = true;
     this.error = '';
@@ -195,7 +192,7 @@ export class AdminVolunteersComponent implements OnInit {
         name: formData.name,
         role: formData.role,
         contact: formData.contact,
-        isAssigned: formData.isAssigned
+        isAssigned: formData.isAssigned,
       };
 
       if (formData.club_id) {
@@ -211,14 +208,12 @@ export class AdminVolunteersComponent implements OnInit {
         volunteerData.event = { event_id: formData.event_id };
       }
 
-      await firstValueFrom(
-        this.http.post(`${this.apiUrl}/volunteers`, volunteerData)
-      );
+      await firstValueFrom(this.http.post(`${this.apiUrl}/volunteers`, volunteerData));
 
       await this.loadVolunteers();
       this.loading = false;
       this.closeCreateModal();
-      
+
       this.toastMessage = 'Volunteer created successfully!';
       this.showSuccessToast = true;
       this.cdr.detectChanges();
@@ -230,7 +225,7 @@ export class AdminVolunteersComponent implements OnInit {
     } catch (error: any) {
       this.loading = false;
       this.error = error.error?.message || 'Failed to create volunteer';
-      
+
       this.toastMessage = this.error;
       this.showErrorToast = true;
       this.cdr.detectChanges();
@@ -262,18 +257,20 @@ export class AdminVolunteersComponent implements OnInit {
     this.cdr.detectChanges();
 
     try {
-      await this.http.delete(`${this.apiUrl}/volunteers/${this.selectedVolunteerId}`, { responseType: 'text' }).toPromise();
-      
+      await this.http
+        .delete(`${this.apiUrl}/volunteers/${this.selectedVolunteerId}`, { responseType: 'text' })
+        .toPromise();
+
       await this.loadVolunteers();
-      
-      await new Promise(resolve => setTimeout(resolve, 3000));
+
+      await new Promise((resolve) => setTimeout(resolve, 3000));
 
       this.loading = false;
       this.showDeleteModal = false;
       this.selectedVolunteerId = null;
       this.cdr.detectChanges();
 
-      await new Promise(resolve => setTimeout(resolve, 300));
+      await new Promise((resolve) => setTimeout(resolve, 300));
 
       this.toastMessage = 'Volunteer deleted successfully!';
       this.showSuccessToast = true;
@@ -286,7 +283,7 @@ export class AdminVolunteersComponent implements OnInit {
     } catch (error: any) {
       this.loading = false;
       this.error = 'Failed to delete volunteer';
-      
+
       this.toastMessage = this.error;
       this.showErrorToast = true;
       this.cdr.detectChanges();

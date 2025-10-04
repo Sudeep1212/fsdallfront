@@ -31,27 +31,33 @@ export interface ParticipationResponse {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class RegistrationService {
-  private apiUrl = 'http://localhost:8080/api';
+  private apiUrl = 'https://fsdallback.onrender.com/api';
 
   constructor(private http: HttpClient) {}
 
   // Create registration
   createRegistration(registrationData: RegistrationRequest): Observable<RegistrationResponse> {
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     });
-    return this.http.post<RegistrationResponse>(`${this.apiUrl}/registrations`, registrationData, { headers });
+    return this.http.post<RegistrationResponse>(`${this.apiUrl}/registrations`, registrationData, {
+      headers,
+    });
   }
 
   // Create participation
   createParticipation(participationData: ParticipationRequest): Observable<ParticipationResponse> {
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     });
-    return this.http.post<ParticipationResponse>(`${this.apiUrl}/participations`, participationData, { headers });
+    return this.http.post<ParticipationResponse>(
+      `${this.apiUrl}/participations`,
+      participationData,
+      { headers }
+    );
   }
 
   // Get registration by ID

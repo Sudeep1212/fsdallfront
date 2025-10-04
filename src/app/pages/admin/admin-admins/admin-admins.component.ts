@@ -19,13 +19,13 @@ interface Admin {
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './admin-admins.component.html',
-  styleUrl: './admin-admins.component.scss'
+  styleUrl: './admin-admins.component.scss',
 })
 export class AdminAdminsComponent implements OnInit {
   admins: Admin[] = [];
   filteredAdmins: Admin[] = [];
   searchTerm: string = '';
-  
+
   showCreateModal = false;
   showEditModal = false;
   showDeleteModal = false;
@@ -35,11 +35,11 @@ export class AdminAdminsComponent implements OnInit {
   adminForm: FormGroup;
   loading = false;
   error = '';
-  
+
   selectedAdminId: number | null = null;
   currentAdminId: number | null = null; // For self-delete protection
-  
-  private apiUrl = 'http://localhost:8080/api';
+
+  private apiUrl = 'https://fsdallback.onrender.com/api';
 
   constructor(
     private fb: FormBuilder,
@@ -51,7 +51,7 @@ export class AdminAdminsComponent implements OnInit {
       name: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      role: ['ADMIN', Validators.required]
+      role: ['ADMIN', Validators.required],
     });
   }
 
@@ -91,7 +91,7 @@ export class AdminAdminsComponent implements OnInit {
 
   async loadAdmins() {
     try {
-      this.admins = await this.http.get<Admin[]>(`${this.apiUrl}/admins`).toPromise() || [];
+      this.admins = (await this.http.get<Admin[]>(`${this.apiUrl}/admins`).toPromise()) || [];
       console.log('Loaded admins:', this.admins);
       this.filteredAdmins = [...this.admins];
       this.cdr.detectChanges();
@@ -103,16 +103,17 @@ export class AdminAdminsComponent implements OnInit {
 
   filterAdmins() {
     const term = this.searchTerm.toLowerCase().trim();
-    
+
     if (!term) {
       this.filteredAdmins = [...this.admins];
       return;
     }
 
-    this.filteredAdmins = this.admins.filter(admin =>
-      admin.name?.toLowerCase().includes(term) ||
-      admin.email?.toLowerCase().includes(term) ||
-      admin.role?.toLowerCase().includes(term)
+    this.filteredAdmins = this.admins.filter(
+      (admin) =>
+        admin.name?.toLowerCase().includes(term) ||
+        admin.email?.toLowerCase().includes(term) ||
+        admin.role?.toLowerCase().includes(term)
     );
   }
 
@@ -159,11 +160,11 @@ export class AdminAdminsComponent implements OnInit {
         name: this.adminForm.value.name,
         email: this.adminForm.value.email,
         password: this.adminForm.value.password, // Will be bcrypt hashed on backend
-        role: this.adminForm.value.role
+        role: this.adminForm.value.role,
       };
-      
+
       await this.http.post<Admin>(`${this.apiUrl}/admins`, adminData).toPromise();
-      
+
       this.closeCreateModal();
       this.showSuccessMessage('Admin created successfully! Password has been securely hashed.');
       await this.loadAdmins();
@@ -179,19 +180,19 @@ export class AdminAdminsComponent implements OnInit {
   openEditModal(admin: Admin) {
     this.selectedAdminId = admin.adminId!;
     this.showEditModal = true;
-    
+
     // Populate form without password
     this.adminForm.patchValue({
       name: admin.name,
       email: admin.email,
       password: '', // Leave password empty
-      role: admin.role
+      role: admin.role,
     });
-    
+
     // Password is optional for edit
     this.adminForm.get('password')?.clearValidators();
     this.adminForm.get('password')?.updateValueAndValidity();
-    
+
     this.error = '';
   }
 
@@ -217,16 +218,18 @@ export class AdminAdminsComponent implements OnInit {
       const adminData: any = {
         name: this.adminForm.value.name,
         email: this.adminForm.value.email,
-        role: this.adminForm.value.role
+        role: this.adminForm.value.role,
       };
-      
+
       // Only include password if it's been changed
       if (this.adminForm.value.password && this.adminForm.value.password.trim() !== '') {
         adminData.password = this.adminForm.value.password; // Will be bcrypt hashed on backend
       }
-      
-      await this.http.put<Admin>(`${this.apiUrl}/admins/${this.selectedAdminId}`, adminData).toPromise();
-      
+
+      await this.http
+        .put<Admin>(`${this.apiUrl}/admins/${this.selectedAdminId}`, adminData)
+        .toPromise();
+
       this.closeEditModal();
       this.showSuccessMessage('Admin updated successfully!');
       await this.loadAdmins();
@@ -251,48 +254,49 @@ export class AdminAdminsComponent implements OnInit {
 
   async confirmDelete() {
     if (!this.selectedAdminId) return;
-    
+
     this.loading = true;
     this.error = '';
     this.cdr.detectChanges();
-    
+
     try {
       console.log('Deleting admin with ID:', this.selectedAdminId);
-      
-      await this.http.delete(`${this.apiUrl}/admins/${this.selectedAdminId}`, { responseType: 'text' }).toPromise();
-      
+
+      await this.http
+        .delete(`${this.apiUrl}/admins/${this.selectedAdminId}`, { responseType: 'text' })
+        .toPromise();
+
       console.log('Delete successful!');
-      
+
       await this.loadAdmins();
-      
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      
+
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+
       this.loading = false;
       this.showDeleteModal = false;
       this.selectedAdminId = null;
       this.cdr.detectChanges();
-      
-      await new Promise(resolve => setTimeout(resolve, 300));
-      
+
+      await new Promise((resolve) => setTimeout(resolve, 300));
+
       this.toastMessage = 'Admin deleted successfully!';
       this.showSuccessToast = true;
       console.log('Toast state:', this.showSuccessToast, 'Message:', this.toastMessage);
       this.cdr.detectChanges();
-      
+
       setTimeout(() => {
         console.log('Hiding toast...');
         this.showSuccessToast = false;
         this.cdr.detectChanges();
       }, 3000);
-      
     } catch (error: any) {
       console.error('Error deleting admin:', error);
-      
+
       this.loading = false;
       this.showDeleteModal = false;
       this.selectedAdminId = null;
       this.cdr.detectChanges();
-      
+
       this.showErrorMessage('Failed to delete admin.');
     }
   }

@@ -20,22 +20,20 @@ interface BackendComment {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CommentService {
-  private apiUrl = environment.apiUrl || 'http://localhost:8080';
+  private apiUrl = environment.apiUrl || 'https://fsdallback.onrender.com';
 
-  constructor(
-    private http: HttpClient,
-    @Inject(PLATFORM_ID) private platformId: Object
-  ) {}
+  constructor(private http: HttpClient, @Inject(PLATFORM_ID) private platformId: Object) {}
 
   // Get recent comments (for home page) - public endpoint
   getRecentComments(limit: number = 3): Observable<Comment[]> {
-    return this.http.get<BackendComment[]>(`${this.apiUrl}/api/comments/recent?limit=${limit}`)
+    return this.http
+      .get<BackendComment[]>(`${this.apiUrl}/api/comments/recent?limit=${limit}`)
       .pipe(
-        map(backendComments => backendComments.map(bc => this.transformBackendComment(bc))),
-        catchError(error => {
+        map((backendComments) => backendComments.map((bc) => this.transformBackendComment(bc))),
+        catchError((error) => {
           console.error('Error fetching recent comments:', error);
           return throwError(() => error);
         })
@@ -44,14 +42,13 @@ export class CommentService {
 
   // Get all comments - public endpoint
   getAllComments(): Observable<Comment[]> {
-    return this.http.get<BackendComment[]>(`${this.apiUrl}/api/comments`)
-      .pipe(
-        map(backendComments => backendComments.map(bc => this.transformBackendComment(bc))),
-        catchError(error => {
-          console.error('Error fetching all comments:', error);
-          return throwError(() => error);
-        })
-      );
+    return this.http.get<BackendComment[]>(`${this.apiUrl}/api/comments`).pipe(
+      map((backendComments) => backendComments.map((bc) => this.transformBackendComment(bc))),
+      catchError((error) => {
+        console.error('Error fetching all comments:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
   // Create new comment (requires authentication)
@@ -67,13 +64,14 @@ export class CommentService {
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
-    
-    return this.http.post<BackendComment>(`${this.apiUrl}/api/comments`, { content }, { headers })
+
+    return this.http
+      .post<BackendComment>(`${this.apiUrl}/api/comments`, { content }, { headers })
       .pipe(
-        map(backendComment => this.transformBackendComment(backendComment)),
-        catchError(error => {
+        map((backendComment) => this.transformBackendComment(backendComment)),
+        catchError((error) => {
           console.error('Error creating comment:', error);
           return throwError(() => error);
         })
@@ -92,16 +90,15 @@ export class CommentService {
     }
 
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
-    
-    return this.http.delete<void>(`${this.apiUrl}/api/comments/${commentId}`, { headers })
-      .pipe(
-        catchError(error => {
-          console.error('Error deleting comment:', error);
-          return throwError(() => error);
-        })
-      );
+
+    return this.http.delete<void>(`${this.apiUrl}/api/comments/${commentId}`, { headers }).pipe(
+      catchError((error) => {
+        console.error('Error deleting comment:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
   // Get comments by user (requires authentication)
@@ -116,13 +113,14 @@ export class CommentService {
     }
 
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
-    
-    return this.http.get<BackendComment[]>(`${this.apiUrl}/api/comments/user/${userId}`, { headers })
+
+    return this.http
+      .get<BackendComment[]>(`${this.apiUrl}/api/comments/user/${userId}`, { headers })
       .pipe(
-        map(backendComments => backendComments.map(bc => this.transformBackendComment(bc))),
-        catchError(error => {
+        map((backendComments) => backendComments.map((bc) => this.transformBackendComment(bc))),
+        catchError((error) => {
           console.error('Error fetching user comments:', error);
           return throwError(() => error);
         })
@@ -131,13 +129,12 @@ export class CommentService {
 
   // Get comments count - public endpoint
   getCommentsCount(): Observable<number> {
-    return this.http.get<number>(`${this.apiUrl}/api/comments/count`)
-      .pipe(
-        catchError(error => {
-          console.error('Error fetching comments count:', error);
-          return throwError(() => error);
-        })
-      );
+    return this.http.get<number>(`${this.apiUrl}/api/comments/count`).pipe(
+      catchError((error) => {
+        console.error('Error fetching comments count:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
   // Transform backend comment to frontend comment interface
@@ -148,7 +145,7 @@ export class CommentService {
       dateTime: new Date(backendComment.createdAt),
       userName: `${backendComment.user.firstName} ${backendComment.user.lastName}`,
       userEmail: backendComment.user.email,
-      userId: backendComment.user.userId
+      userId: backendComment.user.userId,
     };
   }
 }

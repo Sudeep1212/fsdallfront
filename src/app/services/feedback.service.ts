@@ -4,10 +4,10 @@ import { Observable, map, timeout, catchError, of } from 'rxjs';
 import { Feedback, FeedbackRequest, FeedbackResponse } from '../models/feedback.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FeedbackService {
-  private apiUrl = 'http://localhost:8080/api/feedbacks';
+  private apiUrl = 'https://fsdallback.onrender.com/api/feedbacks';
   private readonly FEEDBACK_SUBMITTED_KEY = 'feedback_submitted';
 
   constructor(private http: HttpClient) {}
@@ -16,23 +16,23 @@ export class FeedbackService {
   submitFeedback(feedbackData: FeedbackRequest): Observable<FeedbackResponse> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Accept': 'application/json'
+      Accept: 'application/json',
     });
-    
+
     // Optimized HTTP options for fastest response
     const httpOptions = {
-      headers
+      headers,
     };
-    
+
     return this.http.post<FeedbackResponse>(this.apiUrl, feedbackData, httpOptions).pipe(
       timeout(8000), // 8 second timeout to prevent infinite loading
-      map(response => {
+      map((response) => {
         console.log('HTTP Response received:', response);
         // Mark feedback as submitted in localStorage immediately
         this.markFeedbackAsSubmitted(feedbackData.email);
         return response;
       }),
-      catchError(error => {
+      catchError((error) => {
         console.error('HTTP Error in feedback service:', error);
         throw error; // Re-throw to let component handle it
       })
@@ -64,7 +64,7 @@ export class FeedbackService {
   resetFeedbackStatus(email?: string): void {
     if (email) {
       const submittedEmails = this.getSubmittedFeedbackEmails();
-      const filtered = submittedEmails.filter(e => e !== email);
+      const filtered = submittedEmails.filter((e) => e !== email);
       localStorage.setItem(this.FEEDBACK_SUBMITTED_KEY, JSON.stringify(filtered));
     } else {
       localStorage.removeItem(this.FEEDBACK_SUBMITTED_KEY);
@@ -84,9 +84,9 @@ export class FeedbackService {
   // Update feedback
   updateFeedback(id: number, feedbackData: FeedbackRequest): Observable<FeedbackResponse> {
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     });
-    
+
     return this.http.put<FeedbackResponse>(`${this.apiUrl}/${id}`, feedbackData, { headers });
   }
 

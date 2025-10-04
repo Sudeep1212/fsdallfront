@@ -18,27 +18,24 @@ interface Participation {
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './admin-participations.component.html',
-  styleUrl: './admin-participations.component.scss'
+  styleUrl: './admin-participations.component.scss',
 })
 export class AdminParticipationsComponent implements OnInit {
   participations: Participation[] = [];
   filteredParticipations: Participation[] = [];
   searchTerm: string = '';
-  
+
   showDeleteModal = false;
   showSuccessToast = false;
   showErrorToast = false;
   toastMessage = '';
   loading = false;
-  
-  selectedParticipationId: number | null = null;
-  
-  private apiUrl = 'http://localhost:8080/api';
 
-  constructor(
-    private http: HttpClient,
-    private cdr: ChangeDetectorRef
-  ) {}
+  selectedParticipationId: number | null = null;
+
+  private apiUrl = 'https://fsdallback.onrender.com/api';
+
+  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.loadParticipations();
@@ -46,7 +43,8 @@ export class AdminParticipationsComponent implements OnInit {
 
   async loadParticipations() {
     try {
-      this.participations = await this.http.get<Participation[]>(`${this.apiUrl}/participations`).toPromise() || [];
+      this.participations =
+        (await this.http.get<Participation[]>(`${this.apiUrl}/participations`).toPromise()) || [];
       this.filteredParticipations = [...this.participations];
       this.cdr.detectChanges();
     } catch (error) {
@@ -57,17 +55,18 @@ export class AdminParticipationsComponent implements OnInit {
 
   filterParticipations() {
     const term = this.searchTerm.toLowerCase().trim();
-    
+
     if (!term) {
       this.filteredParticipations = [...this.participations];
       return;
     }
 
-    this.filteredParticipations = this.participations.filter(p =>
-      p.participantName?.toLowerCase().includes(term) ||
-      p.participantCollege?.toLowerCase().includes(term) ||
-      p.eventName?.toLowerCase().includes(term) ||
-      p.eventAmount.toString().includes(term)
+    this.filteredParticipations = this.participations.filter(
+      (p) =>
+        p.participantName?.toLowerCase().includes(term) ||
+        p.participantCollege?.toLowerCase().includes(term) ||
+        p.eventName?.toLowerCase().includes(term) ||
+        p.eventAmount.toString().includes(term)
     );
   }
 
@@ -96,34 +95,37 @@ export class AdminParticipationsComponent implements OnInit {
 
   async confirmDelete() {
     if (!this.selectedParticipationId) return;
-    
+
     this.loading = true;
     this.cdr.detectChanges();
-    
+
     try {
-      await this.http.delete(`${this.apiUrl}/participations/${this.selectedParticipationId}`, { responseType: 'text' }).toPromise();
-      
+      await this.http
+        .delete(`${this.apiUrl}/participations/${this.selectedParticipationId}`, {
+          responseType: 'text',
+        })
+        .toPromise();
+
       await this.loadParticipations();
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+
       this.loading = false;
       this.showDeleteModal = false;
       this.selectedParticipationId = null;
       this.cdr.detectChanges();
-      
-      await new Promise(resolve => setTimeout(resolve, 300));
-      
+
+      await new Promise((resolve) => setTimeout(resolve, 300));
+
       this.toastMessage = 'Participation deleted successfully!';
       this.showSuccessToast = true;
       console.log('Toast state:', this.showSuccessToast, 'Message:', this.toastMessage);
       this.cdr.detectChanges();
-      
+
       setTimeout(() => {
         console.log('Hiding toast...');
         this.showSuccessToast = false;
         this.cdr.detectChanges();
       }, 3000);
-      
     } catch (error: any) {
       console.error('Error deleting participation:', error);
       this.loading = false;

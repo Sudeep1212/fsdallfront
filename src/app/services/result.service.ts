@@ -2,29 +2,29 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, BehaviorSubject, map, catchError, of } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { 
-  Result, 
-  ResultDisplay, 
-  ResultsResponse, 
-  StatisticsResponse, 
+import {
+  Result,
+  ResultDisplay,
+  ResultsResponse,
+  StatisticsResponse,
   Registration,
   Participation,
-  BackendEvent 
+  BackendEvent,
 } from '../models/result.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ResultService {
-  private apiUrl = (environment.apiUrl || 'http://localhost:8080') + '/api';
-  
+  private apiUrl = (environment.apiUrl || 'https://fsdallback.onrender.com') + '/api';
+
   // BehaviorSubjects for reactive data management
   private resultsSubject = new BehaviorSubject<ResultDisplay[]>([]);
   public results$ = this.resultsSubject.asObservable();
-  
+
   private loadingSubject = new BehaviorSubject<boolean>(false);
   public loading$ = this.loadingSubject.asObservable();
-  
+
   private errorSubject = new BehaviorSubject<string | null>(null);
   public error$ = this.errorSubject.asObservable();
 
@@ -36,16 +36,16 @@ export class ResultService {
   getAllResults(): Observable<Result[]> {
     this.loadingSubject.next(true);
     this.errorSubject.next(null);
-    
+
     const fullUrl = `${this.apiUrl}/results`;
-    
+
     return this.http.get<Result[]>(fullUrl).pipe(
-      map(results => {
+      map((results) => {
         console.log('✅ Results loaded from API:', results?.length || 0, 'records');
         this.loadingSubject.next(false);
         return results;
       }),
-      catchError(error => {
+      catchError((error) => {
         console.error('❌ Error fetching results:', error.status, error.statusText);
         this.errorSubject.next('Failed to load results. Please try again.');
         this.loadingSubject.next(false);
@@ -59,7 +59,7 @@ export class ResultService {
    */
   getFormattedResults(): Observable<ResultDisplay[]> {
     return this.getAllResults().pipe(
-      map(results => {
+      map((results) => {
         const transformed = this.transformResultsToDisplay(results);
         console.log('� Formatted results for display:', transformed.length, 'records');
         return transformed;
@@ -76,7 +76,7 @@ export class ResultService {
     rankRange?: string
   ): Observable<ResultDisplay[]> {
     return this.getFormattedResults().pipe(
-      map(results => this.applyFilters(results, searchTerm, eventType, rankRange))
+      map((results) => this.applyFilters(results, searchTerm, eventType, rankRange))
     );
   }
 
@@ -84,9 +84,7 @@ export class ResultService {
    * Get statistics for the dashboard
    */
   getStatistics(): Observable<StatisticsResponse> {
-    return this.getFormattedResults().pipe(
-      map(results => this.calculateStatistics(results))
-    );
+    return this.getFormattedResults().pipe(map((results) => this.calculateStatistics(results)));
   }
 
   /**
@@ -94,8 +92,8 @@ export class ResultService {
    */
   getUniqueEventTypes(): Observable<string[]> {
     return this.getFormattedResults().pipe(
-      map(results => {
-        const eventTypes = [...new Set(results.map(r => r.eventType))];
+      map((results) => {
+        const eventTypes = [...new Set(results.map((r) => r.eventType))];
         return eventTypes.sort();
       })
     );
@@ -106,13 +104,13 @@ export class ResultService {
    * Following relationship chain: Result -> Participation -> Registration -> Events -> Club
    */
   private transformResultsToDisplay(results: Result[]): ResultDisplay[] {
-    const transformedResults = results.map(result => {
+    const transformedResults = results.map((result) => {
       // Extract data from the relationship chain
       const participation = result.participation;
       const registration = participation.registration;
       const event = result.event;
       const club = event.club;
-      
+
       return {
         resultId: result.resultId,
         rank: result.rank,
@@ -129,10 +127,10 @@ export class ResultService {
         score: result.score,
         scorePercentage: Math.min(result.score, 100),
         // Club name from the club entity associated with the event
-        conductedBy: club?.name || 'Unknown Club'
+        conductedBy: club?.name || 'Unknown Club',
       } as ResultDisplay;
     });
-    
+
     return transformedResults;
   }
 
@@ -145,21 +143,22 @@ export class ResultService {
     eventType?: string,
     rankRange?: string
   ): ResultDisplay[] {
-    return results.filter(result => {
+    return results.filter((result) => {
       // Search filter
-      const matchesSearch = !searchTerm || 
+      const matchesSearch =
+        !searchTerm ||
         result.participantName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         result.participantCollege.toLowerCase().includes(searchTerm.toLowerCase()) ||
         result.eventName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         result.eventType.toLowerCase().includes(searchTerm.toLowerCase()) ||
         result.conductedBy.toLowerCase().includes(searchTerm.toLowerCase());
-      
+
       // Event type filter
       const matchesEventType = !eventType || result.eventType === eventType;
-      
+
       // Rank range filter
       const matchesRankRange = !rankRange || this.isInRankRange(result.rank, rankRange);
-      
+
       return matchesSearch && matchesEventType && matchesRankRange;
     });
   }
@@ -188,23 +187,21 @@ export class ResultService {
    */
   private calculateStatistics(results: ResultDisplay[]): StatisticsResponse {
     // Count participants who finished in top 3 positions
-    const topPerformers = results.filter(r => r.rank <= 3).length;
-    
+    const topPerformers = results.filter((r) => r.rank <= 3).length;
+
     // Count completed events based on event end date
     const today = new Date();
     const uniqueCompletedEvents = new Set(
-      results
-        .filter(r => new Date(r.eventEndDate) <= today)
-        .map(r => r.eventName)
+      results.filter((r) => new Date(r.eventEndDate) <= today).map((r) => r.eventName)
     );
-    
+
     // Count total unique participants across all results
-    const totalParticipants = new Set(results.map(r => r.participantId)).size;
-    
+    const totalParticipants = new Set(results.map((r) => r.participantId)).size;
+
     return {
       topPerformers,
       eventsCompleted: uniqueCompletedEvents.size,
-      totalParticipants
+      totalParticipants,
     };
   }
 
@@ -212,8 +209,9 @@ export class ResultService {
    * Get participant initials from name
    */
   private getInitials(name: string): string {
-    return name.split(' ')
-      .map(word => word.charAt(0))
+    return name
+      .split(' ')
+      .map((word) => word.charAt(0))
       .join('')
       .toUpperCase()
       .slice(0, 2);
@@ -227,7 +225,7 @@ export class ResultService {
     const now = new Date();
     const diffTime = now.getTime() - date.getTime();
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    
+
     if (diffDays === 0) return 'Today';
     if (diffDays === 1) return 'Yesterday';
     if (diffDays < 7) return `${diffDays} days ago`;
@@ -235,13 +233,11 @@ export class ResultService {
     return `${Math.floor(diffDays / 30)} months ago`;
   }
 
-
-
   /**
    * Refresh results data
    */
   refreshResults(): void {
-    this.getFormattedResults().subscribe(results => {
+    this.getFormattedResults().subscribe((results) => {
       this.resultsSubject.next(results);
       this.loadingSubject.next(false);
     });
@@ -252,7 +248,7 @@ export class ResultService {
    */
   getResultById(id: number): Observable<Result | null> {
     return this.http.get<Result>(`${this.apiUrl}/results/${id}`).pipe(
-      catchError(error => {
+      catchError((error) => {
         console.error('Error fetching result by ID:', error);
         return of(null);
       })
@@ -268,7 +264,7 @@ export class ResultService {
       .set('eventName', eventName)
       .set('page', page.toString())
       .set('size', size.toString());
-    
+
     return this.http.get<any>(`${this.apiUrl}/results/search`, { params });
   }
 
@@ -277,7 +273,7 @@ export class ResultService {
    */
   createResult(result: Result): Observable<Result> {
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     });
     return this.http.post<Result>(`${this.apiUrl}/results`, result, { headers });
   }
@@ -287,7 +283,7 @@ export class ResultService {
    */
   updateResult(id: number, result: Result): Observable<Result> {
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     });
     return this.http.put<Result>(`${this.apiUrl}/results/${id}`, result, { headers });
   }

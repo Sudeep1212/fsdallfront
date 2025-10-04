@@ -4,10 +4,10 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { Event } from '../models/event.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class EventService {
-  private apiUrl = 'http://localhost:8080/api';
+  private apiUrl = 'https://fsdallback.onrender.com/api';
 
   constructor(private http: HttpClient) {}
 
@@ -34,7 +34,7 @@ export class EventService {
   // Create event (admin only)
   createEvent(event: Event): Observable<Event> {
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     });
     return this.http.post<Event>(`${this.apiUrl}/events`, event, { headers });
   }
@@ -42,7 +42,7 @@ export class EventService {
   // Update event (admin only)
   updateEvent(id: number, event: Event): Observable<Event> {
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     });
     return this.http.put<Event>(`${this.apiUrl}/events/${id}`, event, { headers });
   }

@@ -20,27 +20,24 @@ interface User {
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './admin-users.component.html',
-  styleUrl: './admin-users.component.scss'
+  styleUrl: './admin-users.component.scss',
 })
 export class AdminUsersComponent implements OnInit {
   users: User[] = [];
   filteredUsers: User[] = [];
   searchTerm: string = '';
-  
+
   showDeleteModal = false;
   selectedUserId: number | null = null;
   loading = false;
-  
+
   toastMessage = '';
   showSuccessToast = false;
   showErrorToast = false;
 
-  private apiUrl = 'http://localhost:8080/api';
+  private apiUrl = 'https://fsdallback.onrender.com/api';
 
-  constructor(
-    private http: HttpClient,
-    private cdr: ChangeDetectorRef
-  ) {}
+  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     console.log('=== Users Component Initialized ===');
@@ -49,7 +46,7 @@ export class AdminUsersComponent implements OnInit {
 
   async loadUsers() {
     try {
-      this.users = await this.http.get<User[]>(`${this.apiUrl}/users`).toPromise() || [];
+      this.users = (await this.http.get<User[]>(`${this.apiUrl}/users`).toPromise()) || [];
       console.log('Loaded users:', this.users);
       this.filteredUsers = [...this.users];
       this.cdr.detectChanges();
@@ -60,19 +57,20 @@ export class AdminUsersComponent implements OnInit {
 
   filterUsers() {
     const term = this.searchTerm.toLowerCase().trim();
-    
+
     if (!term) {
       this.filteredUsers = [...this.users];
       return;
     }
 
-    this.filteredUsers = this.users.filter(user =>
-      user.firstName.toLowerCase().includes(term) ||
-      user.lastName.toLowerCase().includes(term) ||
-      user.email.toLowerCase().includes(term) ||
-      user.college.toLowerCase().includes(term) ||
-      user.contact.toLowerCase().includes(term) ||
-      user.role.toLowerCase().includes(term)
+    this.filteredUsers = this.users.filter(
+      (user) =>
+        user.firstName.toLowerCase().includes(term) ||
+        user.lastName.toLowerCase().includes(term) ||
+        user.email.toLowerCase().includes(term) ||
+        user.college.toLowerCase().includes(term) ||
+        user.contact.toLowerCase().includes(term) ||
+        user.role.toLowerCase().includes(term)
     );
   }
 
@@ -105,34 +103,35 @@ export class AdminUsersComponent implements OnInit {
 
   async confirmDelete() {
     if (!this.selectedUserId) return;
-    
+
     this.loading = true;
     this.cdr.detectChanges();
-    
+
     try {
-      await this.http.delete(`${this.apiUrl}/users/${this.selectedUserId}`, { responseType: 'text' }).toPromise();
-      
+      await this.http
+        .delete(`${this.apiUrl}/users/${this.selectedUserId}`, { responseType: 'text' })
+        .toPromise();
+
       await this.loadUsers();
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+
       this.loading = false;
       this.showDeleteModal = false;
       this.selectedUserId = null;
       this.cdr.detectChanges();
-      
-      await new Promise(resolve => setTimeout(resolve, 300));
-      
+
+      await new Promise((resolve) => setTimeout(resolve, 300));
+
       this.toastMessage = 'User deleted successfully!';
       this.showSuccessToast = true;
       console.log('Toast state:', this.showSuccessToast, 'Message:', this.toastMessage);
       this.cdr.detectChanges();
-      
+
       setTimeout(() => {
         console.log('Hiding toast...');
         this.showSuccessToast = false;
         this.cdr.detectChanges();
       }, 3000);
-      
     } catch (error: any) {
       console.error('Error deleting user:', error);
       this.loading = false;

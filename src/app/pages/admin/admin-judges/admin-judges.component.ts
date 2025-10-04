@@ -14,13 +14,13 @@ interface Judge {
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './admin-judges.component.html',
-  styleUrl: './admin-judges.component.scss'
+  styleUrl: './admin-judges.component.scss',
 })
 export class AdminJudgesComponent implements OnInit {
   judges: Judge[] = [];
   filteredJudges: Judge[] = [];
   searchTerm: string = '';
-  
+
   showCreateModal = false;
   showDeleteModal = false;
   showSuccessToast = false;
@@ -29,18 +29,14 @@ export class AdminJudgesComponent implements OnInit {
   judgeForm: FormGroup;
   loading = false;
   error = '';
-  
-  selectedJudgeId: number | null = null;
-  
-  private apiUrl = 'http://localhost:8080/api';
 
-  constructor(
-    private fb: FormBuilder,
-    private http: HttpClient,
-    private cdr: ChangeDetectorRef
-  ) {
+  selectedJudgeId: number | null = null;
+
+  private apiUrl = 'https://fsdallback.onrender.com/api';
+
+  constructor(private fb: FormBuilder, private http: HttpClient, private cdr: ChangeDetectorRef) {
     this.judgeForm = this.fb.group({
-      judge_name: ['', [Validators.required, Validators.minLength(3)]]
+      judge_name: ['', [Validators.required, Validators.minLength(3)]],
     });
   }
 
@@ -50,7 +46,7 @@ export class AdminJudgesComponent implements OnInit {
 
   async loadJudges() {
     try {
-      this.judges = await this.http.get<Judge[]>(`${this.apiUrl}/judges`).toPromise() || [];
+      this.judges = (await this.http.get<Judge[]>(`${this.apiUrl}/judges`).toPromise()) || [];
       this.filteredJudges = [...this.judges];
       this.cdr.detectChanges();
     } catch (error) {
@@ -61,13 +57,13 @@ export class AdminJudgesComponent implements OnInit {
 
   filterJudges() {
     const term = this.searchTerm.toLowerCase().trim();
-    
+
     if (!term) {
       this.filteredJudges = [...this.judges];
       return;
     }
 
-    this.filteredJudges = this.judges.filter(judge =>
+    this.filteredJudges = this.judges.filter((judge) =>
       judge.judge_name?.toLowerCase().includes(term)
     );
   }
@@ -101,11 +97,11 @@ export class AdminJudgesComponent implements OnInit {
     try {
       const formValue = this.judgeForm.value;
       const judgeData = {
-        judge_name: formValue.judge_name
+        judge_name: formValue.judge_name,
       };
-      
+
       await this.http.post<Judge>(`${this.apiUrl}/judges`, judgeData).toPromise();
-      
+
       this.closeCreateModal();
       this.showSuccessMessage('Judge created successfully!');
       await this.loadJudges();
@@ -129,46 +125,47 @@ export class AdminJudgesComponent implements OnInit {
 
   async confirmDelete() {
     if (!this.selectedJudgeId) return;
-    
+
     this.loading = true;
     this.error = '';
     this.cdr.detectChanges();
-    
+
     try {
       console.log('Deleting judge with ID:', this.selectedJudgeId);
-      
-      await this.http.delete(`${this.apiUrl}/judges/${this.selectedJudgeId}`, { responseType: 'text' }).toPromise();
-      
+
+      await this.http
+        .delete(`${this.apiUrl}/judges/${this.selectedJudgeId}`, { responseType: 'text' })
+        .toPromise();
+
       console.log('Delete successful!');
-      
+
       await this.loadJudges();
-      
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      
+
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+
       this.loading = false;
       this.showDeleteModal = false;
       this.selectedJudgeId = null;
       this.cdr.detectChanges();
-      
-      await new Promise(resolve => setTimeout(resolve, 300));
-      
+
+      await new Promise((resolve) => setTimeout(resolve, 300));
+
       this.toastMessage = 'Judge deleted successfully!';
       this.showSuccessToast = true;
       this.cdr.detectChanges();
-      
+
       setTimeout(() => {
         this.showSuccessToast = false;
         this.cdr.detectChanges();
       }, 3000);
-      
     } catch (error: any) {
       console.error('Error deleting judge:', error);
-      
+
       this.loading = false;
       this.showDeleteModal = false;
       this.selectedJudgeId = null;
       this.cdr.detectChanges();
-      
+
       this.showErrorMessage(`Failed to delete judge.`);
     }
   }

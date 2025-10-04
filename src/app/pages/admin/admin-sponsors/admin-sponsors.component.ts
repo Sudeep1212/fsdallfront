@@ -24,14 +24,14 @@ interface Club {
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './admin-sponsors.component.html',
-  styleUrl: './admin-sponsors.component.scss'
+  styleUrl: './admin-sponsors.component.scss',
 })
 export class AdminSponsorsComponent implements OnInit {
   sponsors: Sponsor[] = [];
   clubs: Club[] = [];
   filteredSponsors: Sponsor[] = [];
   searchTerm: string = '';
-  
+
   showCreateModal = false;
   showDeleteModal = false;
   showSuccessToast = false;
@@ -40,22 +40,18 @@ export class AdminSponsorsComponent implements OnInit {
   sponsorForm: FormGroup;
   loading = false;
   error = '';
-  
-  selectedSponsorId: number | null = null;
-  
-  private apiUrl = 'http://localhost:8080/api';
 
-  constructor(
-    private fb: FormBuilder,
-    private http: HttpClient,
-    private cdr: ChangeDetectorRef
-  ) {
+  selectedSponsorId: number | null = null;
+
+  private apiUrl = 'https://fsdallback.onrender.com/api';
+
+  constructor(private fb: FormBuilder, private http: HttpClient, private cdr: ChangeDetectorRef) {
     this.sponsorForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
       isCash: [false, Validators.required],
       mode: ['', [Validators.required, Validators.minLength(3)]],
       contact: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
-      club_id: [null, Validators.required]
+      club_id: [null, Validators.required],
     });
   }
 
@@ -66,7 +62,7 @@ export class AdminSponsorsComponent implements OnInit {
 
   async loadSponsors() {
     try {
-      this.sponsors = await this.http.get<Sponsor[]>(`${this.apiUrl}/sponsors`).toPromise() || [];
+      this.sponsors = (await this.http.get<Sponsor[]>(`${this.apiUrl}/sponsors`).toPromise()) || [];
       this.filteredSponsors = [...this.sponsors];
       this.cdr.detectChanges();
     } catch (error) {
@@ -77,7 +73,7 @@ export class AdminSponsorsComponent implements OnInit {
 
   async loadClubs() {
     try {
-      this.clubs = await this.http.get<Club[]>(`${this.apiUrl}/clubs`).toPromise() || [];
+      this.clubs = (await this.http.get<Club[]>(`${this.apiUrl}/clubs`).toPromise()) || [];
     } catch (error) {
       console.error('Error loading clubs:', error);
     }
@@ -85,16 +81,17 @@ export class AdminSponsorsComponent implements OnInit {
 
   filterSponsors() {
     const term = this.searchTerm.toLowerCase().trim();
-    
+
     if (!term) {
       this.filteredSponsors = [...this.sponsors];
       return;
     }
 
-    this.filteredSponsors = this.sponsors.filter(sponsor =>
-      sponsor.name?.toLowerCase().includes(term) ||
-      sponsor.mode?.toLowerCase().includes(term) ||
-      sponsor.clubName?.toLowerCase().includes(term)
+    this.filteredSponsors = this.sponsors.filter(
+      (sponsor) =>
+        sponsor.name?.toLowerCase().includes(term) ||
+        sponsor.mode?.toLowerCase().includes(term) ||
+        sponsor.clubName?.toLowerCase().includes(term)
     );
   }
 
@@ -133,12 +130,12 @@ export class AdminSponsorsComponent implements OnInit {
         mode: formValue.mode,
         contact: formValue.contact,
         club: {
-          club_id: parseInt(formValue.club_id)
-        }
+          club_id: parseInt(formValue.club_id),
+        },
       };
-      
+
       await this.http.post<Sponsor>(`${this.apiUrl}/sponsors`, sponsorData).toPromise();
-      
+
       this.closeCreateModal();
       this.showSuccessMessage('Sponsor created successfully!');
       await this.loadSponsors();
@@ -162,46 +159,47 @@ export class AdminSponsorsComponent implements OnInit {
 
   async confirmDelete() {
     if (!this.selectedSponsorId) return;
-    
+
     this.loading = true;
     this.error = '';
     this.cdr.detectChanges();
-    
+
     try {
       console.log('Deleting sponsor with ID:', this.selectedSponsorId);
-      
-      await this.http.delete(`${this.apiUrl}/sponsors/${this.selectedSponsorId}`, { responseType: 'text' }).toPromise();
-      
+
+      await this.http
+        .delete(`${this.apiUrl}/sponsors/${this.selectedSponsorId}`, { responseType: 'text' })
+        .toPromise();
+
       console.log('Delete successful!');
-      
+
       await this.loadSponsors();
-      
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      
+
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+
       this.loading = false;
       this.showDeleteModal = false;
       this.selectedSponsorId = null;
       this.cdr.detectChanges();
-      
-      await new Promise(resolve => setTimeout(resolve, 300));
-      
+
+      await new Promise((resolve) => setTimeout(resolve, 300));
+
       this.toastMessage = 'Sponsor deleted successfully!';
       this.showSuccessToast = true;
       this.cdr.detectChanges();
-      
+
       setTimeout(() => {
         this.showSuccessToast = false;
         this.cdr.detectChanges();
       }, 3000);
-      
     } catch (error: any) {
       console.error('Error deleting sponsor:', error);
-      
+
       this.loading = false;
       this.showDeleteModal = false;
       this.selectedSponsorId = null;
       this.cdr.detectChanges();
-      
+
       this.showErrorMessage(`Failed to delete sponsor.`);
     }
   }

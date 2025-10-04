@@ -35,7 +35,7 @@ interface Participation {
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './admin-results.component.html',
-  styleUrl: './admin-results.component.scss'
+  styleUrl: './admin-results.component.scss',
 })
 export class AdminResultsComponent implements OnInit {
   results: Result[] = [];
@@ -43,7 +43,7 @@ export class AdminResultsComponent implements OnInit {
   participations: Participation[] = [];
   filteredResults: Result[] = [];
   searchTerm: string = '';
-  
+
   showCreateModal = false;
   showDeleteModal = false;
   showSuccessToast = false;
@@ -52,21 +52,17 @@ export class AdminResultsComponent implements OnInit {
   resultForm: FormGroup;
   loading = false;
   error = '';
-  
-  selectedResultId: number | null = null;
-  
-  private apiUrl = 'http://localhost:8080/api';
 
-  constructor(
-    private fb: FormBuilder,
-    private http: HttpClient,
-    private cdr: ChangeDetectorRef
-  ) {
+  selectedResultId: number | null = null;
+
+  private apiUrl = 'https://fsdallback.onrender.com/api';
+
+  constructor(private fb: FormBuilder, private http: HttpClient, private cdr: ChangeDetectorRef) {
     this.resultForm = this.fb.group({
       rank: ['', [Validators.required, Validators.min(1)]],
       score: ['', [Validators.required, Validators.min(0)]],
       eventId: [null, Validators.required],
-      participationId: [null, Validators.required]
+      participationId: [null, Validators.required],
     });
   }
 
@@ -78,7 +74,7 @@ export class AdminResultsComponent implements OnInit {
 
   async loadResults() {
     try {
-      this.results = await this.http.get<Result[]>(`${this.apiUrl}/results`).toPromise() || [];
+      this.results = (await this.http.get<Result[]>(`${this.apiUrl}/results`).toPromise()) || [];
       this.filteredResults = [...this.results];
       this.cdr.detectChanges();
     } catch (error) {
@@ -89,7 +85,7 @@ export class AdminResultsComponent implements OnInit {
 
   async loadEvents() {
     try {
-      this.events = await this.http.get<Event[]>(`${this.apiUrl}/events`).toPromise() || [];
+      this.events = (await this.http.get<Event[]>(`${this.apiUrl}/events`).toPromise()) || [];
       this.cdr.detectChanges();
     } catch (error) {
       console.error('Error loading events:', error);
@@ -98,7 +94,8 @@ export class AdminResultsComponent implements OnInit {
 
   async loadParticipations() {
     try {
-      this.participations = await this.http.get<Participation[]>(`${this.apiUrl}/participations`).toPromise() || [];
+      this.participations =
+        (await this.http.get<Participation[]>(`${this.apiUrl}/participations`).toPromise()) || [];
       console.log('Loaded participations:', this.participations);
       console.log('Participations count:', this.participations.length);
       this.cdr.detectChanges();
@@ -109,18 +106,19 @@ export class AdminResultsComponent implements OnInit {
 
   filterResults() {
     const term = this.searchTerm.toLowerCase().trim();
-    
+
     if (!term) {
       this.filteredResults = [...this.results];
       return;
     }
 
-    this.filteredResults = this.results.filter(result =>
-      result.participantName?.toLowerCase().includes(term) ||
-      result.eventName?.toLowerCase().includes(term) ||
-      result.participantCollege?.toLowerCase().includes(term) ||
-      result.rank.toString().includes(term) ||
-      result.score.toString().includes(term)
+    this.filteredResults = this.results.filter(
+      (result) =>
+        result.participantName?.toLowerCase().includes(term) ||
+        result.eventName?.toLowerCase().includes(term) ||
+        result.participantCollege?.toLowerCase().includes(term) ||
+        result.rank.toString().includes(term) ||
+        result.score.toString().includes(term)
     );
   }
 
@@ -134,7 +132,7 @@ export class AdminResultsComponent implements OnInit {
   }
 
   get activeResults(): number {
-    return this.results.filter(r => r.rank <= 3).length; // Count top 3 positions
+    return this.results.filter((r) => r.rank <= 3).length; // Count top 3 positions
   }
 
   openCreateModal() {
@@ -160,20 +158,22 @@ export class AdminResultsComponent implements OnInit {
 
     try {
       const formValue = this.resultForm.value;
-      
+
       // Find the selected event and participation
-      const selectedEvent = this.events.find(e => e.event_id === parseInt(formValue.eventId));
-      const selectedParticipation = this.participations.find(p => p.participationId === parseInt(formValue.participationId));
-      
+      const selectedEvent = this.events.find((e) => e.event_id === parseInt(formValue.eventId));
+      const selectedParticipation = this.participations.find(
+        (p) => p.participationId === parseInt(formValue.participationId)
+      );
+
       const resultData = {
         rank: parseInt(formValue.rank),
         score: parseFloat(formValue.score),
         event: { event_id: formValue.eventId },
-        participation: { participationId: formValue.participationId }
+        participation: { participationId: formValue.participationId },
       };
-      
+
       await this.http.post<Result>(`${this.apiUrl}/results`, resultData).toPromise();
-      
+
       this.closeCreateModal();
       this.showSuccessMessage('Result created successfully!');
       await this.loadResults();
@@ -197,45 +197,46 @@ export class AdminResultsComponent implements OnInit {
 
   async confirmDelete() {
     if (!this.selectedResultId) return;
-    
+
     this.loading = true;
     this.error = '';
     this.cdr.detectChanges();
-    
+
     try {
       console.log('Deleting result with ID:', this.selectedResultId);
-      
-      await this.http.delete(`${this.apiUrl}/results/${this.selectedResultId}`, { responseType: 'text' }).toPromise();
-      
+
+      await this.http
+        .delete(`${this.apiUrl}/results/${this.selectedResultId}`, { responseType: 'text' })
+        .toPromise();
+
       console.log('Delete successful!');
-      
+
       // Reload results immediately
       await this.loadResults();
-      
+
       // Wait 3 seconds while showing "Deleting..." message
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+
       // Now close the modal
       this.loading = false;
       this.showDeleteModal = false;
       this.selectedResultId = null;
       this.cdr.detectChanges();
-      
+
       // Wait for modal animation to complete
-      await new Promise(resolve => setTimeout(resolve, 300));
-      
+      await new Promise((resolve) => setTimeout(resolve, 300));
+
       // Show success toast for 3 seconds
       this.toastMessage = 'Result deleted successfully!';
       this.showSuccessToast = true;
       console.log('Toast state:', this.showSuccessToast, 'Message:', this.toastMessage);
       this.cdr.detectChanges();
-      
+
       setTimeout(() => {
         console.log('Hiding toast...');
         this.showSuccessToast = false;
         this.cdr.detectChanges();
       }, 3000);
-      
     } catch (error: any) {
       console.error('Error deleting result:', error);
       this.loading = false;

@@ -26,10 +26,10 @@ export interface MonthlyRegistration {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DashboardService {
-  private apiUrl = 'http://localhost:8080/api/admin/dashboard';
+  private apiUrl = 'https://fsdallback.onrender.com/api/admin/dashboard';
 
   constructor(private http: HttpClient) {}
 

@@ -22,28 +22,25 @@ interface Feedback {
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './admin-feedbacks.component.html',
-  styleUrl: './admin-feedbacks.component.scss'
+  styleUrl: './admin-feedbacks.component.scss',
 })
 export class AdminFeedbacksComponent implements OnInit {
   feedbacks: Feedback[] = [];
   filteredFeedbacks: Feedback[] = [];
   searchTerm: string = '';
-  
+
   showDeleteModal = false;
   selectedFeedbackId: number | null = null;
   loading = false;
   exporting = false;
-  
+
   toastMessage = '';
   showSuccessToast = false;
   showErrorToast = false;
 
-  private apiUrl = 'http://localhost:8080/api';
+  private apiUrl = 'https://fsdallback.onrender.com/api';
 
-  constructor(
-    private http: HttpClient,
-    private cdr: ChangeDetectorRef
-  ) {}
+  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     console.log('=== Feedbacks Component Initialized ===');
@@ -52,7 +49,8 @@ export class AdminFeedbacksComponent implements OnInit {
 
   async loadFeedbacks() {
     try {
-      this.feedbacks = await this.http.get<Feedback[]>(`${this.apiUrl}/feedbacks`).toPromise() || [];
+      this.feedbacks =
+        (await this.http.get<Feedback[]>(`${this.apiUrl}/feedbacks`).toPromise()) || [];
       console.log('Loaded feedbacks:', this.feedbacks);
       this.filteredFeedbacks = [...this.feedbacks];
       this.cdr.detectChanges();
@@ -63,17 +61,18 @@ export class AdminFeedbacksComponent implements OnInit {
 
   filterFeedbacks() {
     const term = this.searchTerm.toLowerCase().trim();
-    
+
     if (!term) {
       this.filteredFeedbacks = [...this.feedbacks];
       return;
     }
 
-    this.filteredFeedbacks = this.feedbacks.filter(feedback =>
-      feedback.name.toLowerCase().includes(term) ||
-      feedback.email.toLowerCase().includes(term) ||
-      feedback.contactNo.toLowerCase().includes(term) ||
-      feedback.comments.toLowerCase().includes(term)
+    this.filteredFeedbacks = this.feedbacks.filter(
+      (feedback) =>
+        feedback.name.toLowerCase().includes(term) ||
+        feedback.email.toLowerCase().includes(term) ||
+        feedback.contactNo.toLowerCase().includes(term) ||
+        feedback.comments.toLowerCase().includes(term)
     );
   }
 
@@ -110,15 +109,15 @@ export class AdminFeedbacksComponent implements OnInit {
       // Prepare data for Excel
       const exportData = this.feedbacks.map((feedback, index) => ({
         'Sr. No.': index + 1,
-        'Name': feedback.name,
-        'Email': feedback.email,
-        'Contact': feedback.contactNo,
+        Name: feedback.name,
+        Email: feedback.email,
+        Contact: feedback.contactNo,
         'Overall Rating': feedback.overallEventRating,
-        'Organization': feedback.orgManagement,
-        'Venue': feedback.venueFacilities,
+        Organization: feedback.orgManagement,
+        Venue: feedback.venueFacilities,
         'Tech Content': feedback.techContent,
-        'Comments': feedback.comments || 'N/A',
-        'Submitted At': feedback.dateTime ? new Date(feedback.dateTime).toLocaleString() : 'N/A'
+        Comments: feedback.comments || 'N/A',
+        'Submitted At': feedback.dateTime ? new Date(feedback.dateTime).toLocaleString() : 'N/A',
       }));
 
       // Create worksheet
@@ -126,7 +125,7 @@ export class AdminFeedbacksComponent implements OnInit {
 
       // Set column widths
       const columnWidths = [
-        { wch: 8 },  // Sr. No.
+        { wch: 8 }, // Sr. No.
         { wch: 20 }, // Name
         { wch: 30 }, // Email
         { wch: 15 }, // Contact
@@ -135,7 +134,7 @@ export class AdminFeedbacksComponent implements OnInit {
         { wch: 12 }, // Venue
         { wch: 12 }, // Tech Content
         { wch: 40 }, // Comments
-        { wch: 20 }  // Submitted At
+        { wch: 20 }, // Submitted At
       ];
       worksheet['!cols'] = columnWidths;
 
@@ -152,17 +151,16 @@ export class AdminFeedbacksComponent implements OnInit {
 
       console.log('Excel export completed:', filename);
       this.exporting = false;
-      
+
       // Show success toast
       this.toastMessage = `Exported ${this.feedbacks.length} feedbacks to Excel successfully!`;
       this.showSuccessToast = true;
       this.cdr.detectChanges();
-      
+
       setTimeout(() => {
         this.showSuccessToast = false;
         this.cdr.detectChanges();
       }, 3000);
-
     } catch (error) {
       console.error('Error exporting to Excel:', error);
       this.exporting = false;
@@ -182,34 +180,35 @@ export class AdminFeedbacksComponent implements OnInit {
 
   async confirmDelete() {
     if (!this.selectedFeedbackId) return;
-    
+
     this.loading = true;
     this.cdr.detectChanges();
-    
+
     try {
-      await this.http.delete(`${this.apiUrl}/feedbacks/${this.selectedFeedbackId}`, { responseType: 'text' }).toPromise();
-      
+      await this.http
+        .delete(`${this.apiUrl}/feedbacks/${this.selectedFeedbackId}`, { responseType: 'text' })
+        .toPromise();
+
       await this.loadFeedbacks();
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+
       this.loading = false;
       this.showDeleteModal = false;
       this.selectedFeedbackId = null;
       this.cdr.detectChanges();
-      
-      await new Promise(resolve => setTimeout(resolve, 300));
-      
+
+      await new Promise((resolve) => setTimeout(resolve, 300));
+
       this.toastMessage = 'Feedback deleted successfully!';
       this.showSuccessToast = true;
       console.log('Toast state:', this.showSuccessToast, 'Message:', this.toastMessage);
       this.cdr.detectChanges();
-      
+
       setTimeout(() => {
         console.log('Hiding toast...');
         this.showSuccessToast = false;
         this.cdr.detectChanges();
       }, 3000);
-      
     } catch (error: any) {
       console.error('Error deleting feedback:', error);
       this.loading = false;

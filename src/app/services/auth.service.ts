@@ -3,12 +3,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { AuthResponse, LoginRequest, RegisterRequest, User, Admin } from '../models/user.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/api/auth';
+  private apiUrl = 'https://fsdallback.onrender.com/api/auth';
   private currentUserSubject = new BehaviorSubject<User | Admin | null>(null);
   private isLoggedInSubject = new BehaviorSubject<boolean>(false);
 
@@ -25,33 +26,31 @@ export class AuthService {
   // Register new user
   register(registerData: RegisterRequest): Observable<AuthResponse> {
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     });
-    
-    return this.http.post<AuthResponse>(`${this.apiUrl}/register`, registerData, { headers })
-      .pipe(
-        tap(response => {
-          if (response.token && response.user) {
-            this.setAuthData(response.token, response.user);
-          }
-        })
-      );
+
+    return this.http.post<AuthResponse>(`${this.apiUrl}/register`, registerData, { headers }).pipe(
+      tap((response) => {
+        if (response.token && response.user) {
+          this.setAuthData(response.token, response.user);
+        }
+      })
+    );
   }
 
   // Login user
   login(loginData: LoginRequest): Observable<AuthResponse> {
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     });
-    
-    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, loginData, { headers })
-      .pipe(
-        tap(response => {
-          if (response.token && response.user) {
-            this.setAuthData(response.token, response.user);
-          }
-        })
-      );
+
+    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, loginData, { headers }).pipe(
+      tap((response) => {
+        if (response.token && response.user) {
+          this.setAuthData(response.token, response.user);
+        }
+      })
+    );
   }
 
   // Logout user
@@ -96,7 +95,7 @@ export class AuthService {
     if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
       const token = localStorage.getItem('authToken');
       const userStr = localStorage.getItem('currentUser');
-      
+
       if (token && userStr) {
         try {
           const user = JSON.parse(userStr);

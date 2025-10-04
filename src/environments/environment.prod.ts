@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://your-production-api-url.com',
+  apiUrl: 'https://fsdallback.onrender.com',
   geminiApiKey: '', // Will be handled by backend for security
   appName: 'FestFlex',
-  version: '1.0.0'
+  version: '1.0.0',
 };

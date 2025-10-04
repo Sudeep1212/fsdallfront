@@ -15,13 +15,13 @@ interface Venue {
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './admin-venues.component.html',
-  styleUrl: './admin-venues.component.scss'
+  styleUrl: './admin-venues.component.scss',
 })
 export class AdminVenuesComponent implements OnInit {
   venues: Venue[] = [];
   filteredVenues: Venue[] = [];
   searchTerm: string = '';
-  
+
   showCreateModal = false;
   showDeleteModal = false;
   showSuccessToast = false;
@@ -30,19 +30,15 @@ export class AdminVenuesComponent implements OnInit {
   venueForm: FormGroup;
   loading = false;
   error = '';
-  
-  selectedVenueId: number | null = null;
-  
-  private apiUrl = 'http://localhost:8080/api';
 
-  constructor(
-    private fb: FormBuilder,
-    private http: HttpClient,
-    private cdr: ChangeDetectorRef
-  ) {
+  selectedVenueId: number | null = null;
+
+  private apiUrl = 'https://fsdallback.onrender.com/api';
+
+  constructor(private fb: FormBuilder, private http: HttpClient, private cdr: ChangeDetectorRef) {
     this.venueForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
-      floor: ['', [Validators.required, Validators.min(0)]]
+      floor: ['', [Validators.required, Validators.min(0)]],
     });
   }
 
@@ -52,7 +48,7 @@ export class AdminVenuesComponent implements OnInit {
 
   async loadVenues() {
     try {
-      this.venues = await this.http.get<Venue[]>(`${this.apiUrl}/venues`).toPromise() || [];
+      this.venues = (await this.http.get<Venue[]>(`${this.apiUrl}/venues`).toPromise()) || [];
       this.filteredVenues = [...this.venues];
       this.cdr.detectChanges();
     } catch (error) {
@@ -63,15 +59,14 @@ export class AdminVenuesComponent implements OnInit {
 
   filterVenues() {
     const term = this.searchTerm.toLowerCase().trim();
-    
+
     if (!term) {
       this.filteredVenues = [...this.venues];
       return;
     }
 
-    this.filteredVenues = this.venues.filter(venue =>
-      venue.name?.toLowerCase().includes(term) ||
-      venue.floor?.toString().includes(term)
+    this.filteredVenues = this.venues.filter(
+      (venue) => venue.name?.toLowerCase().includes(term) || venue.floor?.toString().includes(term)
     );
   }
 
@@ -105,11 +100,11 @@ export class AdminVenuesComponent implements OnInit {
       const formValue = this.venueForm.value;
       const venueData = {
         name: formValue.name,
-        floor: parseInt(formValue.floor)
+        floor: parseInt(formValue.floor),
       };
-      
+
       await this.http.post<Venue>(`${this.apiUrl}/venues`, venueData).toPromise();
-      
+
       this.closeCreateModal();
       this.showSuccessMessage('Venue created successfully!');
       await this.loadVenues();
@@ -133,46 +128,47 @@ export class AdminVenuesComponent implements OnInit {
 
   async confirmDelete() {
     if (!this.selectedVenueId) return;
-    
+
     this.loading = true;
     this.error = '';
     this.cdr.detectChanges();
-    
+
     try {
       console.log('Deleting venue with ID:', this.selectedVenueId);
-      
-      await this.http.delete(`${this.apiUrl}/venues/${this.selectedVenueId}`, { responseType: 'text' }).toPromise();
-      
+
+      await this.http
+        .delete(`${this.apiUrl}/venues/${this.selectedVenueId}`, { responseType: 'text' })
+        .toPromise();
+
       console.log('Delete successful!');
-      
+
       await this.loadVenues();
-      
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      
+
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+
       this.loading = false;
       this.showDeleteModal = false;
       this.selectedVenueId = null;
       this.cdr.detectChanges();
-      
-      await new Promise(resolve => setTimeout(resolve, 300));
-      
+
+      await new Promise((resolve) => setTimeout(resolve, 300));
+
       this.toastMessage = 'Venue deleted successfully!';
       this.showSuccessToast = true;
       this.cdr.detectChanges();
-      
+
       setTimeout(() => {
         this.showSuccessToast = false;
         this.cdr.detectChanges();
       }, 3000);
-      
     } catch (error: any) {
       console.error('Error deleting venue:', error);
-      
+
       this.loading = false;
       this.showDeleteModal = false;
       this.selectedVenueId = null;
       this.cdr.detectChanges();
-      
+
       this.showErrorMessage(`Failed to delete venue.`);
     }
   }
