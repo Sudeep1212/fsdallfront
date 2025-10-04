@@ -17,8 +17,8 @@
       "dest": "/assets/$1"
     },
     {
-      "src": "/event-registration/(?<id>[^/]+)$",
-      "dest": "/event-registration/[id]"
+      "src": "/event-registration/(?<id>[^/]+)",
+      "dest": "/index.html"
     },
     {
       "src": "/(.*)",
